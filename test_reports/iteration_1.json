@@ -1,0 +1,30 @@
+{
+  "summary": "First E2E test iteration for Walterstown GFC Pitch Booking. Backend: created pytest suite (21 tests) covering public facilities/settings/availability, guest free & paid bookings (Stripe checkout_url produced), repeat bookings, full-vs-parts conflict logic, lookup, JWT cookie auth (register/login/me/my-bookings), and full admin surface (requests filter/approve/decline, facility CRUD, blocks CRUD w/ availability propagation, settings). All 21 tests pass (100%). Frontend: verified homepage (6 facility cards with FREE/PAID badges + photos), Astro booking wizard (4 part pills, availability timeline, correct per-session pricing €60 full / €21 cage), status tracker resolves WGFC-1000 to approved, admin login works and all 4 tabs load with expected data-testid elements (edit-facility x6, block-* fields, settings-* fields, filter-* pills, approve/decline buttons per request). No console errors.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Booking wizard date picker", "issues": ["Uses native HTML date input (<input type=date>) rather than shadcn calendar component. Acceptable but not consistent with rest of shadcn UI."]}
+    ]
+  },
+  "test_report_links": ["/app/backend/tests/backend_test.py", "/app/test_reports/pytest/pytest_results.xml"],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "server.py: `BookingCreate.duration_minutes` uses Pydantic `le=600`, but club max default is 270. Server correctly re-validates against settings and returns 400 — good, no bug.",
+    "server.py `/api/settings/public`: assumes settings doc exists (uses `s.get(...)`); seed creates it on startup so fine, but a missing doc would 500. Consider `s = s or {}`.",
+    "auth.py: cookies use `samesite='none'; secure=True` — correct for cross-site preview domain.",
+    "server.py: CORS `allow_origins=[FRONTEND_URL, localhost:3000]` with `allow_credentials=True` — good (no wildcard with credentials).",
+    "seed_admin correctly updates password hash when ADMIN_PASSWORD changes (idempotent).",
+    "Stripe integration successfully produces valid checkout.stripe.com URLs on the sandbox key; payment_transactions row is created with status=initiated as expected.",
+    "Bcrypt hashes verified via successful login flow (format $2b$).",
+    "Brute-force lockout implemented (5 attempts / 15 min lock)."
+  ],
+  "updated_files": ["/app/backend/tests/backend_test.py"],
+  "success_rate": {"backend": "100% (21/21)", "frontend": "100% of tested flows"},
+  "test_credentials": "admin@walterstowngfc.ie / Walterstown1902 (from /app/memory/test_credentials.md)",
+  "seed_data_creation": "Tests created multiple TEST_-prefixed bookings (WGFC-2004..2010). Sample seeds WGFC-1000..1003 remain intact.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Backend pytest suite lives at /app/backend/tests/backend_test.py — safe to re-run. If it detects excessive TEST_ bookings, clean db.requests where booker_name LIKE 'TEST_%'. All test-ids from problem statement verified present in DOM."
+}

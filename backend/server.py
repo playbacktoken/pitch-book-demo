@@ -87,7 +87,7 @@ async def list_facilities():
 
 @api.get("/settings/public")
 async def public_settings():
-    s = await db.settings.find_one({"_id": "club"})
+    s = await db.settings.find_one({"_id": "club"}) or {}
     return {"max_duration_minutes": s.get("max_duration_minutes", 270),
             "policy_note": s.get("policy_note", "")}
 
