@@ -1,0 +1,324 @@
+{
+  "brand_identity": {
+    "club_name": "Walterstown GFC (Cumann Lúthchleas Gael Baile an Bhuailtigh)",
+    "location": "Navan, County Meath, Ireland",
+    "founded": "1902",
+    "nickname": "The Blacks",
+    "tagline": "Páirc Baile an Bhuailtigh • Pitch & Facilities Booking",
+    "vibe_archetype": "Irish GAA Grassroots Pride meets Swiss Precision Booking",
+    "design_tone": "Authentic local Gaelic club energy: deep obsidian black, crisp chalk pitch-white, vibrant emerald/shamrock pitch green accents, and Meath royal amber highlights. Tactile, approachable for all generations, clutter-free on mobile phones."
+  },
+  "theme_strategy": {
+    "default_mode": "light",
+    "support": "light with crisp dark-accented surfaces (Black & White heritage of 'The Blacks' with lush grass field vibes)",
+    "surface_treatment": "Tactile card surfaces with 1px slate-200 borders, subtle pitch-grass tint headers, crisp status badges, zero muddy gradients, and high contrast APCA compliant text."
+  },
+  "typography": {
+    "headline_font": "Barlow Condensed, 'Cabinet Grotesk', Impact, sans-serif",
+    "headline_rules": {
+      "style": "Strong condensed athletic uppercase or heavy title-case (Barlow Condensed / Cabinet Grotesk / Chivo)",
+      "tracking": "tracking-tight or tracking-wide for overlines",
+      "h1_hero": "text-4xl sm:text-5xl lg:text-6xl font-black uppercase text-slate-900 leading-none",
+      "h2_section": "text-2xl sm:text-3xl lg:text-4xl font-extrabold uppercase text-slate-900",
+      "h3_sub": "text-xl sm:text-2xl font-bold text-slate-800",
+      "h4_card": "text-lg sm:text-xl font-bold text-slate-900"
+    },
+    "body_font": "Plus Jakarta Sans, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+    "body_rules": {
+      "base": "text-base sm:text-sm text-slate-700 leading-relaxed",
+      "meta_label": "text-xs font-semibold tracking-wider uppercase text-slate-500",
+      "numbers_time": "font-mono font-bold tracking-tight text-slate-900"
+    },
+    "font_cdn_links": [
+      "https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;0,800;0,900;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap"
+    ]
+  },
+  "colors": {
+    "primary": {
+      "black": "#111827",
+      "pitch_black": "#0B0F17",
+      "club_black_hover": "#1F2937",
+      "description": "True heritage 'The Blacks' club color — grounds cards, headers, and prominent CTA actions"
+    },
+    "brand_accents": {
+      "pitch_emerald": "#15803D",
+      "pitch_emerald_light": "#DCFCE7",
+      "pitch_emerald_hover": "#166534",
+      "meath_gold": "#D97706",
+      "meath_gold_light": "#FEF3C7",
+      "gaa_sky": "#0284C7"
+    },
+    "badges": {
+      "free_slot": {
+        "bg": "#ECFDF5",
+        "text": "#047857",
+        "border": "#A7F3D0",
+        "label": "FREE / CLUB INCLUDED"
+      },
+      "paid_slot": {
+        "bg": "#FEF3C7",
+        "text": "#B45309",
+        "border": "#FDE68A",
+        "label": "PAID SLOT"
+      },
+      "status_requested": {
+        "bg": "#EFF6FF",
+        "text": "#1D4ED8",
+        "border": "#BFDBFE",
+        "label": "REQUESTED"
+      },
+      "status_approved": {
+        "bg": "#ECFDF5",
+        "text": "#065F46",
+        "border": "#6EE7B7",
+        "label": "APPROVED"
+      },
+      "status_declined": {
+        "bg": "#FEF2F2",
+        "text": "#B91C1C",
+        "border": "#FECACA",
+        "label": "DECLINED"
+      },
+      "status_blocked": {
+        "bg": "#F3F4F6",
+        "text": "#4B5563",
+        "border": "#E5E7EB",
+        "label": "MAINTENANCE / BLOCKED"
+      }
+    },
+    "surfaces": {
+      "page_bg": "#F8FAFC",
+      "card_bg": "#FFFFFF",
+      "subtle_bg": "#F1F5F9",
+      "border_default": "#E2E8F0",
+      "border_strong": "#CBD5E1",
+      "header_glass": "rgba(255, 255, 255, 0.94)",
+      "dark_card": "#111827",
+      "dark_card_border": "#1F2937"
+    }
+  },
+  "spacing_and_layout": {
+    "container_max_width": "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8",
+    "section_spacing": "py-8 sm:py-12 lg:py-16",
+    "card_padding": "p-5 sm:p-6 lg:p-8",
+    "grid_modes": {
+      "facility_grid": "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8",
+      "slot_picker_grid": "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 sm:gap-3",
+      "admin_split": "grid grid-cols-1 lg:grid-cols-12 gap-8"
+    }
+  },
+  "facilities_data_model": [
+    {
+      "id": "astro",
+      "name": "All-Weather Astro Turf",
+      "tag": "Floodlit 3G",
+      "photo": "https://images.unsplash.com/photo-1781069713686-42983d791a5f?crop=entropy&cs=srgb&fm=jpg&q=85",
+      "note": "High-spec 3G synthetic turf with LED floodlighting. Perfect for winter sessions and small-sided games in all conditions.",
+      "is_paid_default": true,
+      "hourly_rate": 60,
+      "parts": [
+        {"id": "astro_full", "name": "Full Astro", "rate_multiplier": 1.0},
+        {"id": "astro_cage_1", "name": "Cage 1 (North End)", "rate_multiplier": 0.35},
+        {"id": "astro_cage_2", "name": "Cage 2 (Middle)", "rate_multiplier": 0.35},
+        {"id": "astro_cage_3", "name": "Cage 3 (South End)", "rate_multiplier": 0.35}
+      ]
+    },
+    {
+      "id": "main_pitch",
+      "name": "Main Pitch (Páirc Uí Bhroin)",
+      "tag": "Championship Match Pitch",
+      "photo": "https://images.unsplash.com/photo-1531410828623-a21e67dae762?crop=entropy&cs=srgb&fm=jpg&q=85",
+      "note": "Full GAA specification championship surface with stadium dugouts, scoreboard, and match-standard floodlights.",
+      "is_paid_default": true,
+      "hourly_rate": 80,
+      "parts": [
+        {"id": "main_full", "name": "Full Pitch (Match Play)", "rate_multiplier": 1.0},
+        {"id": "main_top_half", "name": "Top Half (Clubhouse End)", "rate_multiplier": 0.55},
+        {"id": "main_second_half", "name": "Second Half (Road End)", "rate_multiplier": 0.55}
+      ]
+    },
+    {
+      "id": "back_pitch",
+      "name": "Back Pitch",
+      "tag": "Full Grass Pitch",
+      "photo": "https://images.unsplash.com/photo-1783787748654-eabdf2ebf80d?crop=entropy&cs=srgb&fm=jpg&q=85",
+      "note": "Dedicated grass match & drill pitch running alongside Stafford's and Boland's boundaries. Well-drained sand-slit pitch.",
+      "is_paid_default": false,
+      "hourly_rate": 0,
+      "parts": [
+        {"id": "back_full", "name": "Full Pitch", "rate_multiplier": 1.0},
+        {"id": "back_stafford", "name": "Half (Stafford's Side)", "rate_multiplier": 0.5},
+        {"id": "back_boland", "name": "Half (Boland's Side)", "rate_multiplier": 0.5}
+      ]
+    },
+    {
+      "id": "training_pitch",
+      "name": "Training Pitch",
+      "tag": "Floodlit Training Grid",
+      "photo": "https://images.unsplash.com/photo-1781069713686-42983d791a5f?crop=entropy&cs=srgb&fm=jpg&q=85",
+      "note": "Multi-station training ground with warm-up zones and floodlights for mid-week team drills.",
+      "is_paid_default": false,
+      "hourly_rate": 0,
+      "parts": [
+        {"id": "train_full", "name": "Full Training Ground", "rate_multiplier": 1.0},
+        {"id": "train_area_1", "name": "Area 1 (Sprint & Agility Grid)", "rate_multiplier": 0.5},
+        {"id": "train_area_2", "name": "Area 2 (Kicking & Ball Work)", "rate_multiplier": 0.5}
+      ]
+    },
+    {
+      "id": "juvenile_pitch",
+      "name": "Juvenile Pitch (Nursery & Go-Games)",
+      "tag": "Underage GAA",
+      "photo": "https://images.unsplash.com/photo-1531410828623-a21e67dae762?crop=entropy&cs=srgb&fm=jpg&q=85",
+      "note": "Sized specifically for Under-7 to Under-13 Go-Games, coaching clinics, and nursery Saturday morning kickabouts.",
+      "is_paid_default": false,
+      "hourly_rate": 0,
+      "parts": [
+        {"id": "juvenile_full", "name": "Full Juvenile Pitch", "rate_multiplier": 1.0}
+      ]
+    },
+    {
+      "id": "gym",
+      "name": "Club High-Performance Gym",
+      "tag": "S&C Suite",
+      "photo": "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?crop=entropy&cs=srgb&fm=jpg&q=85",
+      "note": "Equipped with power racks, Olympic bumper plates, dumbbells, spin bikes, and recovery area. For team S&C and certified members.",
+      "is_paid_default": true,
+      "hourly_rate": 35,
+      "parts": [
+        {"id": "gym_full", "name": "Entire Gym (Squad Booking)", "rate_multiplier": 1.0},
+        {"id": "gym_slots", "name": "Individual Member Slot (1 Person)", "rate_multiplier": 0.25}
+      ]
+    }
+  ],
+  "image_urls": {
+    "hero_crest_badge": "SVG inline heraldic shield with black and white quartered crest, Gaelic football and Celtic knotwork",
+    "facilities": [
+      {
+        "category": "pitch_championship",
+        "url": "https://images.unsplash.com/photo-1531410828623-a21e67dae762?crop=entropy&cs=srgb&fm=jpg&q=85",
+        "alt": "GAA championship manicured pitch Walterstown",
+        "usage": "Main Pitch card and hero banner"
+      },
+      {
+        "category": "astro_turf",
+        "url": "https://images.unsplash.com/photo-1781069713686-42983d791a5f?crop=entropy&cs=srgb&fm=jpg&q=85",
+        "alt": "Floodlit modern all-weather sports turf",
+        "usage": "All-Weather Astro Turf card"
+      },
+      {
+        "category": "back_pitch",
+        "url": "https://images.unsplash.com/photo-1783787748654-eabdf2ebf80d?crop=entropy&cs=srgb&fm=jpg&q=85",
+        "alt": "Lush green community sports pitch",
+        "usage": "Back Pitch and Training Pitch cards"
+      },
+      {
+        "category": "gym_weights",
+        "url": "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?crop=entropy&cs=srgb&fm=jpg&q=85",
+        "alt": "Club fitness and athletic conditioning suite",
+        "usage": "Club Gym facility card"
+      },
+      {
+        "category": "gym_racks",
+        "url": "https://images.unsplash.com/photo-1576678927484-cc907957088c?crop=entropy&cs=srgb&fm=jpg&q=85",
+        "alt": "Weights and training gear",
+        "usage": "Gym modal or secondary image"
+      }
+    ]
+  },
+  "component_structure": {
+    "header": {
+      "type": "Sticky Crystal-Glass Navigation Bar",
+      "brand": {
+        "title": "WALTERSTOWN GFC",
+        "subtitle": "ÁR GCLUB • PITCH & FACILITY BOOKINGS",
+        "crest": "Shield with Black/White sash and Gaelic football icon"
+      },
+      "nav_items": [
+        {"label": "Book a Pitch", "target": "facilities-section", "test_id": "nav-link-facilities"},
+        {"label": "Today's Schedule", "target": "schedule-section", "test_id": "nav-link-schedule"},
+        {"label": "My Bookings", "target": "my-bookings-modal", "test_id": "nav-link-my-bookings"},
+        {"label": "Admin Portal", "target": "admin-section", "test_id": "nav-link-admin"}
+      ],
+      "quick_cta": {
+        "text": "Check Availability",
+        "test_id": "nav-cta-quick-book"
+      }
+    },
+    "hero_section": {
+      "eyebrow": "COUNTY MEATH GAA • EST. 1902 • THE BLACKS",
+      "title": "Reserve Pitch Time & Club Facilities",
+      "tagline": "Simple, transparent bookings for teams, juvenile squads, coaches, and community members. Check real-time pitch status, book with 15-minute precision, and receive instant confirmation.",
+      "stats_ribbon": [
+        {"value": "6", "label": "Facilities & Gym"},
+        {"value": "15-min", "label": "Slot Increments"},
+        {"value": "Up to 8 wks", "label": "Repeat Bookings"},
+        {"value": "Instant", "label": "Email & Status Tracking"}
+      ]
+    },
+    "facility_selector_cards": {
+      "badges_mandatory": "Every facility displays: FREE vs PAID hourly tag, availability dot (Green/Orange), and part counter.",
+      "card_interactions": "Clicking 'Select & Book' highlights active facility, opens part picker and date/time selector with smooth scroll."
+    },
+    "slot_picker_ux": {
+      "rules": [
+        "1. Facility & Part selection dropdown/pill group (e.g., Astro -> Full vs Cage 1/2/3).",
+        "2. Date picker (default today, quick toggles: Today, Tomorrow, Saturday, Sunday, or calendar).",
+        "3. Start Time selector (07:00 to 22:00 in 15-min increments: e.g., 18:00, 18:15, 18:30).",
+        "4. Duration picker: 1h min, 15-min steps up to 4h30m (e.g. 1h 00m, 1h 15m, 1h 30m, 2h 00m... up to 4h 30m).",
+        "5. Visual Availability Timeline: Shows a 15-minute visual strip for the selected pitch with clear 'Available' (emerald), 'Booked' (slate), and 'Maintenance/Blocked' (diagonal pattern).",
+        "6. Repeat Booking Toggle: 'Repeat weekly on this day' with dropdown for 2 to 8 weeks.",
+        "7. Pricing Calculator: Real-time calculation showing: Duration x Rate = Total (or €0.00 FREE for back/training/juvenile)."
+      ]
+    },
+    "checkout_and_auth_flow": {
+      "guest_vs_account": {
+        "guest_tab": "Book as Guest: Full Name, Email Address, Contact Phone, Team/Organization notes.",
+        "member_tab": "Club Member Sign-In: Quick login for registered Walterstown coaches and members to auto-fill details and sync past history."
+      },
+      "payment_step": {
+        "trigger": "If Total > €0 (e.g. Astro or Gym squad session), show Stripe Card Payment modal/component with Card Number, Expiry, CVC, Postcode, and 'Pay & Submit Request' button.",
+        "free_flow": "If Total == €0, show 'Submit Free Club Booking Request' with 0 payment friction."
+      },
+      "feedback_toast": "Uses sonner toast notifications for: Request Submitted, Booking Approved, Admin Block Created, Settings Updated."
+    },
+    "booking_status_tracker": {
+      "purpose": "Users can check any booking by reference ID (e.g. WGFC-8821) or their email address.",
+      "status_badges": {
+        "requested": "Pending Admin Review (Yellow/Blue badge) — Email notice sent to Walterstown pitch coordinator.",
+        "approved": "Pitch Confirmed & Locked (Green badge) — Floodlights and gate schedule ready.",
+        "declined": "Declined with club officer note (e.g., County championship clash or waterlogged pitch)."
+      }
+    },
+    "admin_dashboard": {
+      "auth_barrier": "Secure Admin Login modal/view (Passcode or Admin email/password with demo quick-fill).",
+      "admin_navigation": [
+        "Incoming Booking Requests (Approve/Decline with custom note)",
+        "Facility & Part Manager (Edit rates, notes, photos, active status)",
+        "Block Off Slots (Pitch maintenance, grass seeding, county fixtures)",
+        "Club Alert Settings (Set alert notification email, booking policy disclaimer)"
+      ],
+      "table_ux": "High-density clean table with quick filters: 'All', 'Pending Approval', 'Approved', 'Paid', 'Declined', 'Blocked'."
+    }
+  },
+  "instructions_to_main_agent": [
+    "1. Follow the Walterstown GFC identity: 'The Blacks' - Black, White, Emerald Pitch Green accents, Meath Gold badges. Never look like a generic corporate SaaS. This is a proud 1902 Irish GAA club.",
+    "2. All files are in React .js (NOT .tsx). Ensure JSX syntax is pure .js/.jsx compatible.",
+    "3. Mandatory data-testid attributes on ALL buttons, inputs, facility cards, filter pills, slot items, and modal triggers (e.g. data-testid='facility-card-astro', data-testid='slot-picker-date', data-testid='submit-booking-button', data-testid='admin-approve-btn-WGFC-101').",
+    "4. Implement all 6 facilities specified in problem statement: Astro (Full, Cage 1/2/3), Main Pitch (Full, Top Half, Second Half), Back Pitch (Full, Half Stafford's Side, Half Boland's Side), Training Pitch (Full, Area 1, Area 2), Juvenile Pitch, Gym (Full squad, individual slot).",
+    "5. Slot picker must strictly support: min 1h, 15-minute increments up to ~4h30m, and repeat booking up to 8 weeks.",
+    "6. Make availability obvious at a glance: visual timeline bar showing available vs booked vs blocked slots for the selected pitch.",
+    "7. Clear distinct badges for FREE vs PAID slots, and status badges (Requested -> Approved / Declined).",
+    "8. Mock Stripe payment modal for paid slots with realistic card input, card brand detection icon, and simulated processing state with receipt summary.",
+    "9. Admin dashboard must include: Approve/Decline actions with note, Block off slots modal (e.g., pitch maintenance or Meath championship match), Facility editor (rates, notes, photos), and Settings (alert email).",
+    "10. Provide sample pre-seeded bookings (e.g. Walterstown Senior Men, Under-15 Camogie, Nursery Saturday Morning, Local 5-a-side) so the calendar and status tracker look populated immediately on first load.",
+    "11. Mobile first responsiveness: Ensure full booking wizard is smooth on mobile phones (sticky booking summary on mobile, large tap targets >= 44px)."
+  ],
+  "UNIVERSAL GUIDELINES FOR MAIN AGENT": {
+    "anti_ai_slop": "Do NOT use default centered AI layouts with generic purple/blue gradients. Use bold athletic typography, crisp black/white/emerald GAA club palette, textured badges, and strong optical alignment.",
+    "transitions": "Never use 'transition: all'. Explicitly use 'transition: color 0.15s, background-color 0.15s, border-color 0.15s, box-shadow 0.15s'.",
+    "header_transparency": "Header MUST NOT be completely transparent. Use 'bg-white/95 backdrop-blur-md border-b border-slate-200' to guarantee 100% legibility over any scroll content.",
+    "toast_library": "Use Sonner for toasts (sonner import available in package.json).",
+    "icons": "Use lucide-react (installed: 0.516.0). Never use AI emoji icons like 🤖🧠💡 for club buttons. Use authentic sport icons (Calendar, Clock, Shield, MapPin, CheckCircle, AlertTriangle, CreditCard, Lock, Users, Dumbbell, Sparkles)."
+  }
+}
