@@ -100,11 +100,11 @@ async def availability(facility_id: str, date: str):
     occupied = []
     for s in slots:
         occupied.append({"zones": s.get("zones", []), "start_time": s["start_time"],
-                         "end_time": s["end_time"], "part_id": s.get("part_id"),
+                         "end_time": s["end_time"], "part_id": s.get("part_id"), "part_name": s.get("part_name", ""),
                          "status": s["status"], "type": "booking"})
     for b in blocks:
         occupied.append({"zones": b.get("zones", []), "start_time": b["start_time"],
-                         "end_time": b["end_time"], "part_id": b.get("part_id"),
+                         "end_time": b["end_time"], "part_id": b.get("part_id"), "part_name": b.get("part_name", ""),
                          "status": "blocked", "type": "block", "reason": b.get("reason", "")})
     return {"occupied": occupied}
 

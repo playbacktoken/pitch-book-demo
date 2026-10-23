@@ -55,3 +55,4 @@ everyone is kept informed by email.
 - Facilities renamed: Astro, Main Pitch, Back Pitch, Training Pitch, Juvenile Pitch, Gym (DB synced).
 - 2026-06: Club crest (frontend/public/logo.jpg) used in header, hero, footer, admin, payment pages, favicon and email header.
 - 2026-06: Only Astro is paid. Main Pitch & Gym set free (seed + DB). Free/Paid badges and price text hidden for free facilities; 'Paid Slot' shown only on Astro.
+- 2026-06: Availability now a single-column day timeline showing existing bookings/blocks (time, area, status); click an hour to set start time. Availability API returns part_name.

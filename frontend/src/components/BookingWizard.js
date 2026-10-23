@@ -77,18 +77,13 @@ export default function BookingWizard({ facility, maxDuration, onBooked }) {
   const perSession = facility.is_paid ? Math.round(rate * (duration / 60) * 100) / 100 : 0;
   const isPaid = facility.is_paid && perSession > 0;
 
-  const cellStatus = (cs, ce) => {
-    let status = "free";
-    for (const o of occupied) {
-      const oz = new Set(o.zones || []);
-      const intersects = [...zones].some((z) => oz.has(z));
-      if (intersects && overlaps(cs, ce, o.start_time, o.end_time)) {
-        if (o.type === "block") return "blocked";
-        status = "booked";
-      }
-    }
-    return status;
-  };
+  const relevant = useMemo(
+    () =>
+      occupied
+        .filter((o) => (o.zones || []).some((z) => zones.has(z)))
+        .map((o) => ({ ...o, part_name: o.part_name || facility.parts.find((p) => p.id === o.part_id)?.name || "" })),
+    [occupied, zones, facility]
+  );
 
   const selectionConflict = useMemo(() => {
     for (const o of occupied) {
@@ -240,38 +235,7 @@ export default function BookingWizard({ facility, maxDuration, onBooked }) {
             <span>Availability — {part?.name}</span>
             {loadingAvail && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
           </div>
-          <div className="rounded-xl border border-slate-200 bg-white p-3 space-y-1" data-testid="availability-timeline">
-            {HOURS.map((h) => (
-              <div key={h} className="flex items-center gap-2">
-                <span className="w-12 text-xs font-mono-nums font-bold text-slate-400">
-                  {String(h).padStart(2, "0")}:00
-                </span>
-                <div className="flex-1 grid grid-cols-4 gap-1">
-                  {[0, 15, 30, 45].map((mm) => {
-                    const cs = fromMinutes(h * 60 + mm);
-                    const ce = fromMinutes(h * 60 + mm + 15);
-                    const st = cellStatus(cs, ce);
-                    const selected = toMinutes(cs) >= toMinutes(start) && toMinutes(cs) < toMinutes(end);
-                    let cls = "bg-emerald-100";
-                    if (st === "booked") cls = "bg-slate-300";
-                    if (st === "blocked") cls = "diag-blocked";
-                    return (
-                      <div
-                        key={mm}
-                        className={`h-5 rounded ${cls} ${selected ? "ring-2 ring-[#15803d] ring-offset-1" : ""}`}
-                        title={`${cs} · ${st}`}
-                      />
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
-            <div className="flex items-center gap-4 pt-2 text-xs text-slate-500">
-              <span className="flex items-center gap-1"><span className="h-3 w-3 rounded bg-emerald-100 inline-block" /> Available</span>
-              <span className="flex items-center gap-1"><span className="h-3 w-3 rounded bg-slate-300 inline-block" /> Booked</span>
-              <span className="flex items-center gap-1"><span className="h-3 w-3 rounded diag-blocked inline-block" /> Blocked</span>
-            </div>
-          </div>
+          <DayTimeline occupied={relevant} start={start} end={end} onPick={setStart} clash={selectionConflict} />
         </div>
 
         {/* repeat */}
@@ -324,7 +288,7 @@ export default function BookingWizard({ facility, maxDuration, onBooked }) {
 
       {/* right: summary + booker */}
       <div className="lg:col-span-2 space-y-4">
-        <div className="rounded-xl border border-slate-200 bg-[#111827] text-white p-5 lg:sticky lg:top-24">
+        <div className="rounded-xl border border-slate-200 bg-[#111827] text-white p-5">
           <div className="font-display text-xl font-extrabold uppercase tracking-wide">{facility.name}</div>
           <div className="text-sm text-slate-300">{part?.name}</div>
 
@@ -395,6 +359,57 @@ export default function BookingWizard({ facility, maxDuration, onBooked }) {
           </p>
         </div>
       </div>
+    </div>
+  );
+}
+
+const HOUR_PX = 44;
+
+function DayTimeline({ occupied, start, end, onPick, clash }) {
+  const top = (t) => ((toMinutes(t) - HOURS[0] * 60) / 60) * HOUR_PX;
+  const sorted = [...occupied].sort((a, b) => toMinutes(a.start_time) - toMinutes(b.start_time));
+  return (
+    <div className="rounded-xl border border-slate-200 bg-white p-3" data-testid="availability-timeline">
+      <div className="relative overflow-hidden" style={{ height: HOURS.length * HOUR_PX }}>
+        {HOURS.map((h, i) => (
+          <button
+            key={h}
+            type="button"
+            onClick={() => onPick(fromMinutes(h * 60))}
+            data-testid={`timeline-hour-${h}`}
+            className="absolute left-0 right-0 flex items-start border-t border-slate-100 hover:bg-slate-50 transition-colors"
+            style={{ top: i * HOUR_PX, height: HOUR_PX }}
+          >
+            <span className="w-14 pt-1 text-left text-xs font-mono-nums font-bold text-slate-400">
+              {String(h).padStart(2, "0")}:00
+            </span>
+          </button>
+        ))}
+        {sorted.map((o, i) => (
+          <div
+            key={i}
+            data-testid={`timeline-existing-${i}`}
+            className={`absolute left-16 right-2 rounded-lg px-3 py-1 text-xs font-semibold overflow-hidden pointer-events-none ${
+              o.type === "block" ? "diag-blocked text-slate-700" : o.status === "approved" ? "bg-slate-800 text-white" : "bg-slate-300 text-slate-800"
+            }`}
+            style={{ top: top(o.start_time), height: Math.max(top(o.end_time) - top(o.start_time), 18) }}
+          >
+            {o.start_time}–{o.end_time} · {o.part_name}
+            {" · "}
+            {o.type === "block" ? `Unavailable${o.reason ? ` (${o.reason})` : ""}` : o.status === "approved" ? "Booked" : "Requested"}
+          </div>
+        ))}
+        <div
+          className={`absolute left-16 right-2 rounded-lg border-2 border-dashed pointer-events-none ${clash ? "border-red-500" : "border-[#15803d] bg-emerald-50/60"}`}
+          style={{ top: top(start), height: top(end) - top(start) }}
+          data-testid="timeline-selection"
+        >
+          <span className={`absolute right-2 top-1 text-[11px] font-bold ${clash ? "text-red-600" : "text-[#15803d]"}`}>Your time {start}–{end}</span>
+        </div>
+      </div>
+      {sorted.length === 0 && (
+        <p className="pt-2 text-xs text-slate-500" data-testid="timeline-empty">No bookings on this day yet.</p>
+      )}
     </div>
   );
 }
