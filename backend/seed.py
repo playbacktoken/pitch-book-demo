@@ -30,7 +30,8 @@ FACILITIES = [
     {
         "id": "back_pitch", "name": "Back Pitch", "tag": "Grass pitch",
         "photo": "https://images.unsplash.com/photo-1783787748654-eabdf2ebf80d?crop=entropy&cs=srgb&fm=jpg&q=85",
-        "note": "Book the full pitch or one half. Left and right are as you look out at the pitch with the clubhouse behind you.",
+        "note": "Book the full pitch or one half.",
+        "area_hint": "Left and right are as you look out at the pitch with the clubhouse behind you.",
         "is_paid": False, "hourly_rate": 0.0, "active": True, "order": 3,
         "parts": [
             {"id": "back_full", "name": "Full Pitch", "rate_multiplier": 1.0, "zones": ["staf", "bol"]},

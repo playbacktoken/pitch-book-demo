@@ -164,6 +164,9 @@ export default function BookingWizard({ facility, maxDuration, onBooked }) {
               </button>
             ))}
           </div>
+          {facility.area_hint && (
+            <p className="mt-2 text-xs text-slate-500" data-testid="area-hint">{facility.area_hint}</p>
+          )}
         </div>
 
         {/* date */}

@@ -345,6 +345,7 @@ class FacilityBody(BaseModel):
     is_paid: bool = False
     hourly_rate: float = 0.0
     fixed_duration_minutes: Optional[int] = None
+    area_hint: str = ""
     active: bool = True
     order: int = 99
     parts: List[dict] = []
