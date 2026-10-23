@@ -6,7 +6,7 @@ from db import db
 FACILITIES = [
     {
         "id": "astro", "name": "Astro", "tag": "Astro",
-        "photo": "https://images.unsplash.com/photo-1600529533273-938db2591dc4?crop=entropy&cs=srgb&fm=jpg&q=85&w=1200",
+        "photo": "/sites/astro.jpg",
         "note": "Book the full astro or a single cage.",
         "is_paid": True, "hourly_rate": 160.0, "fixed_duration_minutes": 60, "active": True, "order": 1,
         "parts": [
@@ -18,7 +18,7 @@ FACILITIES = [
     },
     {
         "id": "main_pitch", "name": "Main Pitch", "tag": "Grass pitch",
-        "photo": "https://images.unsplash.com/photo-1531410828623-a21e67dae762?crop=entropy&cs=srgb&fm=jpg&q=85",
+        "photo": "/sites/main_pitch.jpg",
         "note": "Book the full pitch or one half.",
         "is_paid": False, "hourly_rate": 0.0, "active": True, "order": 2,
         "parts": [
@@ -29,7 +29,7 @@ FACILITIES = [
     },
     {
         "id": "back_pitch", "name": "Back Pitch", "tag": "Grass pitch",
-        "photo": "https://images.unsplash.com/photo-1783787748654-eabdf2ebf80d?crop=entropy&cs=srgb&fm=jpg&q=85",
+        "photo": "/sites/back_pitch.jpg",
         "note": "Book the full pitch or one half.",
         "area_hint": "Left and right are as you look out at the pitch with the clubhouse behind you.",
         "is_paid": False, "hourly_rate": 0.0, "active": True, "order": 3,
@@ -41,7 +41,7 @@ FACILITIES = [
     },
     {
         "id": "training_pitch", "name": "Training Pitch", "tag": "Training",
-        "photo": "https://images.unsplash.com/photo-1729843352938-0e10fbf96585?crop=entropy&cs=srgb&fm=jpg&q=85&w=1200",
+        "photo": "/sites/training_pitch.jpg",
         "note": "Book the full training pitch or one area.",
         "is_paid": False, "hourly_rate": 0.0, "active": True, "order": 4,
         "parts": [
@@ -52,7 +52,7 @@ FACILITIES = [
     },
     {
         "id": "juvenile_pitch", "name": "Juvenile Pitch", "tag": "Underage",
-        "photo": "https://images.unsplash.com/photo-1526232761682-d26e03ac148e?crop=entropy&cs=srgb&fm=jpg&q=85",
+        "photo": "/sites/juvenile_pitch.jpg",
         "note": "For underage training and games.",
         "is_paid": False, "hourly_rate": 0.0, "active": True, "order": 5,
         "parts": [

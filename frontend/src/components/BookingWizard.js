@@ -16,6 +16,7 @@ import {
   addDaysISO,
 } from "@/lib/time";
 import { Button } from "@/components/ui/button";
+import { SiteMap } from "@/components/SiteMap";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -137,7 +138,11 @@ export default function BookingWizard({ facility, maxDuration, onBooked }) {
       {/* left: pickers */}
       <div className="lg:col-span-3 space-y-6">
         {/* part selector */}
-        <div>
+        <div className="flex flex-col sm:flex-row gap-5">
+        {facility.id !== "gym" && (
+          <SiteMap activeId={facility.id} partId={partId} className="w-40 shrink-0 self-center sm:self-start" />
+        )}
+        <div className="flex-1">
           <div className="text-xs font-semibold tracking-wider uppercase text-slate-500 mb-2 flex items-center gap-1">
             <MapPin className="h-3.5 w-3.5" /> Choose area
           </div>
@@ -161,6 +166,7 @@ export default function BookingWizard({ facility, maxDuration, onBooked }) {
           {facility.area_hint && (
             <p className="mt-2 text-xs text-slate-500" data-testid="area-hint">{facility.area_hint}</p>
           )}
+        </div>
         </div>
 
         {/* date */}

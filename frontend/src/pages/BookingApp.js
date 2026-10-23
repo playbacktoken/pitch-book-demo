@@ -3,6 +3,7 @@ import { api } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
 import Header, { Crest } from "@/components/Header";
 import BookingWizard from "@/components/BookingWizard";
+import { SiteMap } from "@/components/SiteMap";
 import { StatusBadge, PriceBadge, PayBadge } from "@/components/badges";
 import { fmtMoney, fmtDate } from "@/lib/time";
 import { Button } from "@/components/ui/button";
@@ -93,10 +94,20 @@ export default function BookingApp() {
       {/* Facilities */}
       <section ref={facRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
         <SectionHeading eyebrow="Facilities" title="Choose a Facility" />
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
-          {facilities.map((f) => (
-            <FacilityCard key={f.id} f={f} active={selected?.id === f.id} onSelect={() => selectFacility(f)} />
-          ))}
+        <div className="mt-8 grid grid-cols-1 lg:grid-cols-[340px_1fr] gap-8 items-start">
+          <div className="lg:sticky lg:top-24 max-w-sm mx-auto lg:mx-0 w-full">
+            <SiteMap
+              facilities={facilities}
+              activeId={selected?.id}
+              onSelect={(id) => selectFacility(facilities.find((f) => f.id === id))}
+            />
+            <p className="mt-2 text-xs text-slate-500">Click a pitch on the map to book it.</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {facilities.map((f) => (
+              <FacilityCard key={f.id} f={f} active={selected?.id === f.id} onSelect={() => selectFacility(f)} />
+            ))}
+          </div>
         </div>
 
         {selected && (
