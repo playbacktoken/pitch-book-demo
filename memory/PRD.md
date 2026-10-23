@@ -61,3 +61,4 @@ everyone is kept informed by email.
 - 2026-06: Site map (frontend/public/sitemap.png) via components/SiteMap.js: clickable on home (left of cards), highlighted chosen pitch/cage/half in booking section (not gym). Card photos = crops in public/sites/*.jpg (gym keeps stock). Training areas 1/2 not mapped separately (location unknown).
 - 2026-06: alert_email set to niallreynolds7@gmail.com; that user promoted to admin.
 - 2026-06: Blocks support date ranges (From/To, max 1 year) + All day; stored per-day with group_id, listed/deleted as a group; API warns on clashing existing bookings.
+- 2026-06: All booking emails list each session's date and time (emailer._details_block reads slots).

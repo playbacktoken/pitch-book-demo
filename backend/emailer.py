@@ -3,7 +3,9 @@ import re
 import ipaddress
 import logging
 import httpx
+from db import db
 from html import escape
+from datetime import date
 from html.parser import HTMLParser
 from urllib.parse import urlparse
 
@@ -120,13 +122,23 @@ def _wrap(inner: str) -> str:
             f'</td></tr></table></td></tr></table>')
 
 
-def _details_block(req: dict) -> str:
+def _fmt_slot(s: dict) -> str:
+    d = date.fromisoformat(s["date"]).strftime("%a %d %b %Y")
+    return f'{d}, {s["start_time"]}–{s["end_time"]}'
+
+
+async def _details_block(req: dict) -> str:
+    slots = await db.slots.find({"request_id": req.get("id"), "status": {"$ne": "cancelled"}}).sort(
+        [("date", 1), ("start_time", 1)]).to_list(200)
     rows = [
         ("Reference", req.get("reference", "")),
         ("Facility", f'{req.get("facility_name","")} — {req.get("part_name","")}'),
-        ("Sessions", str(req.get("session_count", 1))),
-        ("Status", req.get("status", "").upper()),
     ]
+    if len(slots) == 1:
+        rows.append(("Date & time", _fmt_slot(slots[0])))
+    else:
+        rows += [(f"Session {i}", _fmt_slot(sl)) for i, sl in enumerate(slots, 1)]
+    rows.append(("Status", req.get("status", "").upper()))
     cells = "".join(
         f'<tr><td style="padding:6px 0;color:#64748B;font-size:13px">{escape(str(k))}</td>'
         f'<td style="padding:6px 0;color:#0F172A;font-size:13px;font-weight:700" align="right">{escape(str(v))}</td></tr>'
@@ -137,7 +149,7 @@ def _details_block(req: dict) -> str:
 async def send_booking_confirmation(req: dict):
     inner = (f'<h2 style="color:#0F172A;font-size:20px;margin:0 0 8px">Booking request received</h2>'
              f'<p style="color:#475569;font-size:14px">Hi {escape(req.get("booker_name",""))}, we have received your '
-             f'booking request. The club will review it and email you when it is approved or declined.</p>{_details_block(req)}')
+             f'booking request. The club will review it and email you when it is approved or declined.</p>{await _details_block(req)}')
     return await send_email(to=req["email"], subject=f'Booking request received — {req.get("reference","")}', html=_wrap(inner))
 
 
@@ -163,7 +175,7 @@ async def send_status_update(req: dict, pay: dict | None = None):
                  f'<strong>Note from the club:</strong> {escape(str(note))}</p>') if note else ""
     inner = (f'<h2 style="color:{color};font-size:20px;margin:0 0 8px">{heading}</h2>'
              f'<p style="color:#475569;font-size:14px">Hi {escape(req.get("booker_name",""))}, {msg}</p>'
-             f'{note_html}{_pay_block(pay) if pay else ""}{_details_block(req)}')
+             f'{note_html}{_pay_block(pay) if pay else ""}{await _details_block(req)}')
     return await send_email(to=req["email"], subject=f'{heading} — {req.get("reference","")}', html=_wrap(inner))
 
 
@@ -171,7 +183,7 @@ async def send_payment_due(req: dict, dates: list, pay: dict):
     inner = (f'<h2 style="color:#0F172A;font-size:20px;margin:0 0 8px">Payment due</h2>'
              f'<p style="color:#475569;font-size:14px">Hi {escape(req.get("booker_name","")) }, your booking on '
              f'{escape(", ".join(dates))} at {escape(req.get("start_time",""))} needs to be paid.</p>'
-             f'{_pay_block(pay)}{_details_block(req)}')
+             f'{_pay_block(pay)}{await _details_block(req)}')
     return await send_email(to=req["email"], subject=f'Payment due — {req.get("reference","")}', html=_wrap(inner))
 
 
@@ -179,7 +191,7 @@ async def send_payment_expired(req: dict, dates: list):
     inner = (f'<h2 style="color:#B91C1C;font-size:20px;margin:0 0 8px">Booking removed</h2>'
              f'<p style="color:#475569;font-size:14px">Hi {escape(req.get("booker_name",""))}, payment was not '
              f'received in time, so your booking on {escape(", ".join(dates))} has been removed. '
-             f'You can make a new booking on the club website.</p>{_details_block(req)}')
+             f'You can make a new booking on the club website.</p>{await _details_block(req)}')
     return await send_email(to=req["email"], subject=f'Booking removed — {req.get("reference","")}', html=_wrap(inner))
 
 
@@ -193,5 +205,5 @@ async def send_admin_alert(req: dict, admin_email: str):
              f'<td align="right" style="font-size:13px;padding:4px 0">{escape(req.get("email",""))}</td></tr>'
              f'<tr><td style="color:#64748B;font-size:13px;padding:4px 0">Phone</td>'
              f'<td align="right" style="font-size:13px;padding:4px 0">{escape(req.get("phone",""))}</td></tr>'
-             f'</table>{_details_block(req)}')
+             f'</table>{await _details_block(req)}')
     return await send_email(to=admin_email, subject=f'New booking request — {req.get("reference","")}', html=_wrap(inner))
