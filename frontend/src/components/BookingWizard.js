@@ -126,14 +126,14 @@ export default function BookingWizard({ facility, maxDuration, onBooked }) {
         origin_url: window.location.origin,
       });
       if (data.checkout_url) {
-        toast.info("Redirecting to secure payment…");
+        toast.info("Going to payment…");
         window.location.href = data.checkout_url;
         return;
       }
       const skipped = data.skipped_dates?.length;
       toast.success(
-        `Request ${data.request.reference} submitted! ${data.booked_dates.length} session(s) awaiting approval.` +
-          (skipped ? ` (${skipped} clashing date(s) skipped)` : "")
+        `Request ${data.request.reference} sent. ${data.booked_dates.length} session(s) waiting for approval.` +
+          (skipped ? ` ${skipped} date(s) already booked were left out.` : "")
       );
       onBooked?.(data.request);
     } catch (err) {
@@ -330,7 +330,7 @@ export default function BookingWizard({ facility, maxDuration, onBooked }) {
 
           {selectionConflict ? (
             <div className="mt-3 flex items-center gap-2 rounded-lg bg-red-500/15 text-red-300 px-3 py-2 text-sm font-semibold" data-testid="conflict-warning">
-              <AlertTriangle className="h-4 w-4" /> This slot clashes — pick another time.
+              <AlertTriangle className="h-4 w-4" /> This time is already booked. Please choose another.
             </div>
           ) : (
             <div className="mt-3 flex items-center gap-2 rounded-lg bg-emerald-500/15 text-emerald-300 px-3 py-2 text-sm font-semibold">
@@ -364,11 +364,11 @@ export default function BookingWizard({ facility, maxDuration, onBooked }) {
             <TabsContent value="member" className="pt-2">
               {user ? (
                 <p className="text-sm text-slate-600">
-                  Booking as <strong>{user.name}</strong> ({user.email}). Your details are filled in.
+                  Booking as <strong>{user.name}</strong> ({user.email}).
                 </p>
               ) : (
                 <p className="text-sm text-slate-600">
-                  Use the <strong>Sign In / Join</strong> button at the top to log in, or just book as a guest.
+                  Sign in using the <strong>Sign In / Join</strong> button at the top, or book as a guest.
                 </p>
               )}
               <div className="mt-2">
@@ -388,10 +388,10 @@ export default function BookingWizard({ facility, maxDuration, onBooked }) {
             ) : isPaid ? (
               <CreditCard className="h-4 w-4 mr-2" />
             ) : null}
-            {isPaid ? `Pay ${fmtMoney(estTotal)} & Request` : "Submit Free Request"}
+            {isPaid ? `Pay ${fmtMoney(estTotal)} & Request` : "Send Request"}
           </Button>
           <p className="mt-2 text-[11px] text-slate-400 text-center">
-            Bookings are confirmed once the club approves your request.
+            Your booking is confirmed once the club approves it.
           </p>
         </div>
       </div>

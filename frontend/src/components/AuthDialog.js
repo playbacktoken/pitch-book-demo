@@ -26,7 +26,7 @@ export default function AuthDialog({ open, onOpenChange }) {
     setLoading(true);
     try {
       const u = await login(loginData.email, loginData.password);
-      toast.success(`Welcome back, ${u.name?.split(" ")[0]}!`);
+      toast.success(`Signed in as ${u.name}`);
       onOpenChange(false);
     } catch (err) {
       toast.error(formatApiErrorDetail(err.response?.data?.detail) || err.message);
@@ -40,7 +40,7 @@ export default function AuthDialog({ open, onOpenChange }) {
     setLoading(true);
     try {
       const u = await register(regData);
-      toast.success(`Account created — fáilte, ${u.name?.split(" ")[0]}!`);
+      toast.success("Account created");
       onOpenChange(false);
     } catch (err) {
       toast.error(formatApiErrorDetail(err.response?.data?.detail) || err.message);
@@ -57,7 +57,7 @@ export default function AuthDialog({ open, onOpenChange }) {
             Club Members
           </DialogTitle>
           <DialogDescription>
-            Sign in to track your bookings, or create an account. You can also book as a guest.
+            Sign in to see your bookings, or create an account. You do not need an account to book.
           </DialogDescription>
         </DialogHeader>
         <Tabs defaultValue="login">

@@ -150,7 +150,7 @@ function RequestsTab() {
     const { req, action } = decision;
     try {
       await api.post(`/admin/requests/${req.id}/${action}`, { note });
-      toast.success(`${req.reference} ${action === "approve" ? "approved" : "declined"} — booker notified by email.`);
+      toast.success(`${req.reference} ${action === "approve" ? "approved" : "declined"}. The booker has been emailed.`);
       setDecision(null); setNote("");
       load();
     } catch (err) {
@@ -383,7 +383,7 @@ function BlocksTab() {
   const create = async () => {
     try {
       await api.post("/admin/blocks", form);
-      toast.success("Slot blocked off");
+      toast.success("Slot blocked");
       setBlocks((await api.get("/admin/blocks")).data);
     } catch (err) {
       toast.error(formatApiErrorDetail(err.response?.data?.detail) || err.message);

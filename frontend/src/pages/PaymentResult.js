@@ -59,7 +59,7 @@ export function PaymentSuccess() {
         <>
           <Loader2 className="h-12 w-12 mx-auto animate-spin text-emerald-400" />
           <h1 className="mt-4 font-display text-2xl font-extrabold uppercase">Confirming payment…</h1>
-          <p className="mt-2 text-slate-400 text-sm">Hang tight while we confirm your payment with Stripe.</p>
+          <p className="mt-2 text-slate-400 text-sm">Please wait while we check your payment.</p>
         </>
       )}
       {state === "paid" && (
@@ -69,8 +69,8 @@ export function PaymentSuccess() {
             Payment Received
           </h1>
           <p className="mt-2 text-slate-300 text-sm">
-            Your booking request <strong className="font-mono-nums">{reference}</strong> is paid and now awaiting
-            club approval. We've emailed your confirmation.
+            Booking request <strong className="font-mono-nums">{reference}</strong> has been paid and is waiting
+            for club approval. A confirmation has been sent to your email.
           </p>
           <Link to="/">
             <Button className="mt-6 bg-[#15803d] hover:bg-[#166534] text-white" data-testid="back-home-btn">
@@ -84,8 +84,8 @@ export function PaymentSuccess() {
           <XCircle className="h-14 w-14 mx-auto text-amber-400" />
           <h1 className="mt-4 font-display text-2xl font-extrabold uppercase">Still Processing</h1>
           <p className="mt-2 text-slate-300 text-sm">
-            We couldn't confirm the payment just yet. If you completed checkout, your booking will update shortly —
-            check its status with your reference on the homepage.
+            We could not confirm your payment yet. If you paid, your booking will update shortly.
+            You can check it using your booking reference on the home page.
           </p>
           <Link to="/">
             <Button className="mt-6 bg-white/10 border border-white/20 text-white hover:bg-white/20">
@@ -104,7 +104,7 @@ export function PaymentCancel() {
       <XCircle className="h-14 w-14 mx-auto text-slate-400" />
       <h1 className="mt-4 font-display text-2xl font-extrabold uppercase">Payment Cancelled</h1>
       <p className="mt-2 text-slate-300 text-sm">
-        No charge was made. Your slot has not been confirmed. You can start the booking again any time.
+        You have not been charged and the booking was not made. You can book again at any time.
       </p>
       <Link to="/">
         <Button className="mt-6 bg-[#15803d] hover:bg-[#166534] text-white">

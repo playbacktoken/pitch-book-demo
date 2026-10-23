@@ -134,9 +134,8 @@ def _details_block(req: dict) -> str:
 
 async def send_booking_confirmation(req: dict):
     inner = (f'<h2 style="color:#0F172A;font-size:20px;margin:0 0 8px">Booking request received</h2>'
-             f'<p style="color:#475569;font-size:14px">Hi {escape(req.get("booker_name",""))}, thanks for your '
-             f'request. It is now awaiting review by the club pitch coordinator. You will get another email once '
-             f'it is approved or declined.</p>{_details_block(req)}')
+             f'<p style="color:#475569;font-size:14px">Hi {escape(req.get("booker_name",""))}, we have received your '
+             f'booking request. The club will review it and email you when it is approved or declined.</p>{_details_block(req)}')
     return await send_email(to=req["email"], subject=f'Booking request received — {req.get("reference","")}', html=_wrap(inner))
 
 
@@ -144,8 +143,8 @@ async def send_status_update(req: dict):
     approved = req.get("status") == "approved"
     heading = "Booking approved" if approved else "Booking declined"
     color = "#15803D" if approved else "#B91C1C"
-    msg = ("Your pitch booking has been confirmed. See you at the club!" if approved
-           else "Unfortunately your booking request could not be accommodated.")
+    msg = ("your booking has been approved." if approved
+           else "your booking request has been declined.")
     note = req.get("admin_note")
     note_html = (f'<p style="color:#475569;font-size:14px;background:#F1F5F9;padding:12px;border-radius:8px">'
                  f'<strong>Note from the club:</strong> {escape(str(note))}</p>') if note else ""
@@ -157,7 +156,7 @@ async def send_status_update(req: dict):
 
 async def send_admin_alert(req: dict, admin_email: str):
     inner = (f'<h2 style="color:#0F172A;font-size:20px;margin:0 0 8px">New booking request</h2>'
-             f'<p style="color:#475569;font-size:14px">A new request needs your review.</p>'
+             f'<p style="color:#475569;font-size:14px">A new booking request is waiting for approval.</p>'
              f'<table role="presentation" width="100%" style="margin:8px 0">'
              f'<tr><td style="color:#64748B;font-size:13px;padding:4px 0">Booker</td>'
              f'<td align="right" style="font-size:13px;font-weight:700;padding:4px 0">{escape(req.get("booker_name",""))}</td></tr>'

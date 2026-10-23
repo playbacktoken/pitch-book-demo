@@ -10,13 +10,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
   CalendarDays,
-  Clock,
-  Repeat,
-  Mail,
   ChevronRight,
   Search,
-  Ticket,
-  Sparkles,
 } from "lucide-react";
 
 export default function BookingApp() {
@@ -64,14 +59,14 @@ export default function BookingApp() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
           <div className="max-w-2xl animate-rise">
             <div className="inline-flex items-center gap-2 text-[11px] font-bold tracking-[0.25em] text-emerald-400 uppercase">
-              <Crest className="h-6 w-6" /> County Meath GAA • Est. 1902 • The Blacks
+              <Crest className="h-6 w-6" /> Walterstown GFC · Navan, Co. Meath
             </div>
             <h1 className="mt-4 font-display text-4xl sm:text-5xl lg:text-6xl font-black uppercase leading-[0.95]">
-              Reserve Pitch Time &amp; Club Facilities
+              Pitch &amp; Facility Bookings
             </h1>
             <p className="mt-4 text-base text-slate-300 leading-relaxed">
-              Simple, transparent bookings for teams, juvenile squads, coaches and community members.
-              Check real-time pitch status, book with 15-minute precision, and get instant email confirmation.
+              Club teams, members and the public can request pitches, the astro and the gym here.
+              All bookings must be approved by the club. You will get an email when your request is approved or declined.
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
               <Button
@@ -92,26 +87,12 @@ export default function BookingApp() {
             </div>
           </div>
 
-          <div className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-3xl">
-            {[
-              { v: "6", l: "Facilities & Gym", Icon: Sparkles },
-              { v: "15-min", l: "Slot Increments", Icon: Clock },
-              { v: "Up to 8 wks", l: "Repeat Bookings", Icon: Repeat },
-              { v: "Instant", l: "Email & Status", Icon: Mail },
-            ].map((s) => (
-              <div key={s.l} className="rounded-xl bg-white/5 border border-white/10 p-4">
-                <s.Icon className="h-5 w-5 text-emerald-400" />
-                <div className="mt-2 font-display text-2xl font-extrabold">{s.v}</div>
-                <div className="text-xs text-slate-400 font-semibold">{s.l}</div>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 
       {/* Facilities */}
       <section ref={facRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
-        <SectionHeading eyebrow="Our Grounds" title="Choose a Facility" />
+        <SectionHeading eyebrow="Facilities" title="Choose a Facility" />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
           {facilities.map((f) => (
             <FacilityCard key={f.id} f={f} active={selected?.id === f.id} onSelect={() => selectFacility(f)} />
@@ -124,7 +105,7 @@ export default function BookingApp() {
               <div className="flex items-center gap-2 mb-6">
                 <CalendarDays className="h-5 w-5 text-[#15803d]" />
                 <h3 className="font-display text-2xl font-extrabold uppercase tracking-wide">
-                  Book — {selected.name}
+                  Book: {selected.name}
                 </h3>
               </div>
               <BookingWizard
@@ -141,7 +122,7 @@ export default function BookingApp() {
       {/* My bookings */}
       {user && (
         <section ref={myRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 scroll-mt-24">
-          <SectionHeading eyebrow="Your Account" title="My Bookings" />
+          <SectionHeading eyebrow="Account" title="My Bookings" />
           <MyBookings />
         </section>
       )}
@@ -149,12 +130,9 @@ export default function BookingApp() {
       {/* Status tracker */}
       <section ref={statusRef} className="bg-[#0b0f17] text-white scroll-mt-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
-          <div className="inline-flex items-center gap-2 text-[11px] font-bold tracking-[0.25em] text-emerald-400 uppercase">
-            <Ticket className="h-4 w-4" /> Track a Request
-          </div>
-          <h2 className="mt-3 font-display text-3xl lg:text-4xl font-extrabold uppercase">Check Your Booking</h2>
+          <h2 className="font-display text-3xl lg:text-4xl font-extrabold uppercase">Check Your Booking</h2>
           <p className="mt-2 text-slate-400 max-w-xl text-sm">
-            Enter your booking reference (e.g. WGFC-2000) or the email you booked with.
+            Enter your booking reference (e.g. WGFC-2000) or the email address you booked with.
           </p>
           <StatusTracker />
         </div>
@@ -166,7 +144,7 @@ export default function BookingApp() {
             <Crest className="h-7 w-7" />
             <span className="font-display font-bold text-white tracking-wide">WALTERSTOWN GFC</span>
           </div>
-          <span>Páirc Baile an Bhuailtigh, Navan, Co. Meath • Est. 1902</span>
+          <span>Navan, Co. Meath</span>
         </div>
       </footer>
     </div>
@@ -223,7 +201,7 @@ function FacilityCard({ f, active, onSelect }) {
           data-testid={`select-facility-${f.id}`}
           className="w-full mt-4 bg-[#111827] hover:bg-[#1f2937] text-white font-bold"
         >
-          Select &amp; Book <ChevronRight className="h-4 w-4 ml-1" />
+          Book <ChevronRight className="h-4 w-4 ml-1" />
         </Button>
       </div>
     </div>
@@ -268,7 +246,7 @@ function MyBookings() {
     <div className="mt-6 space-y-3" data-testid="my-bookings-list">
       {rows.length === 0 ? (
         <div className="rounded-xl border border-dashed border-slate-300 p-8 text-center text-slate-500">
-          No bookings yet — pick a facility above to get started.
+          You have no bookings yet.
         </div>
       ) : (
         rows.map((r) => <BookingRow key={r.id} r={r} />)
