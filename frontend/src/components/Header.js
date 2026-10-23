@@ -1,20 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Shield, Menu, X, LogIn, LogOut, User, CalendarDays } from "lucide-react";
+import { Menu, X, LogIn, LogOut, User, CalendarDays } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
 import AuthDialog from "@/components/AuthDialog";
 
 export const Crest = ({ className = "h-9 w-9" }) => (
-  <div className={`${className} relative flex items-center justify-center rounded-lg bg-white overflow-hidden ring-2 ring-white/20`}>
-    <div className="absolute inset-0 grid grid-cols-2 grid-rows-2">
-      <div className="bg-[#111827]" />
-      <div className="bg-white" />
-      <div className="bg-white" />
-      <div className="bg-[#111827]" />
-    </div>
-    <Shield className="relative z-10 h-4 w-4 text-[#15803d]" strokeWidth={2.5} />
-  </div>
+  <img src="/logo.jpg" alt="Walterstown GFC crest" className={`${className} rounded-lg bg-black object-contain`} data-testid="club-crest" />
 );
 
 export default function Header({ onNav }) {
@@ -39,9 +31,7 @@ export default function Header({ onNav }) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between gap-4">
           <button onClick={() => go("top")} className="flex items-center gap-3" data-testid="brand-home-btn">
-            <div className="rounded-lg bg-[#111827] p-1.5">
-              <Crest />
-            </div>
+            <Crest className="h-12 w-12" />
             <div className="text-left leading-none">
               <div className="font-display text-xl font-extrabold tracking-wide text-[#111827]">
                 WALTERSTOWN GFC

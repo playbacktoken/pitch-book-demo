@@ -10,7 +10,7 @@ function Shell({ children }) {
     <div className="min-h-screen bg-[#0b0f17] text-white flex items-center justify-center px-4">
       <div className="max-w-md w-full rounded-2xl border border-white/10 bg-white/5 p-8 text-center animate-rise">
         <div className="flex justify-center mb-5">
-          <div className="rounded-xl bg-[#111827] p-2"><Crest className="h-10 w-10" /></div>
+          <Crest className="h-20 w-20" />
         </div>
         {children}
       </div>

@@ -109,6 +109,8 @@ def _wrap(inner: str) -> str:
             f'<table role="presentation" width="560" style="background:#FFFFFF;border:1px solid #E2E8F0;'
             f'border-radius:12px;overflow:hidden;font-family:Arial,Helvetica,sans-serif">'
             f'<tr><td style="background:#111827;padding:20px 28px">'
+            f'<img src="https://customer-assets-39nsmqrw.emergentagent.net/job_577e4300-2fa0-4703-82a1-8041cd38c03f/artifacts/a79fd76ae7e56c32_walterstown%20logo.jpg" '
+            f'alt="Walterstown GFC" width="56" height="56" style="display:block;margin-bottom:10px;border-radius:8px">'
             f'<span style="color:#FFFFFF;font-size:20px;font-weight:800;letter-spacing:1px">WALTERSTOWN GFC</span>'
             f'<span style="color:#15803D;font-size:12px;display:block;letter-spacing:2px">PITCH &amp; FACILITY BOOKINGS</span>'
             f'</td></tr>'

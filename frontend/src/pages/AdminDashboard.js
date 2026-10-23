@@ -42,7 +42,7 @@ export default function AdminDashboard() {
       <header className="bg-[#111827] text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="rounded-lg bg-white/10 p-1.5"><Crest /></div>
+            <Crest className="h-11 w-11" />
             <div>
               <div className="font-display text-lg font-extrabold tracking-wide">ADMIN PORTAL</div>
               <div className="text-[10px] tracking-[0.18em] text-emerald-400 font-semibold">WALTERSTOWN GFC</div>
@@ -101,7 +101,7 @@ function AdminLogin({ onLogin, isMember, onLogout }) {
   return (
     <div className="min-h-screen bg-[#0b0f17] flex items-center justify-center px-4">
       <form onSubmit={submit} className="max-w-sm w-full rounded-2xl border border-white/10 bg-white/5 p-8 animate-rise" data-testid="admin-login-form">
-        <div className="flex justify-center mb-4"><div className="rounded-xl bg-[#111827] p-2"><Crest className="h-10 w-10" /></div></div>
+        <div className="flex justify-center mb-4"><Crest className="h-20 w-20" /></div>
         <h1 className="text-center font-display text-2xl font-extrabold uppercase text-white flex items-center justify-center gap-2">
           <Shield className="h-5 w-5 text-emerald-400" /> Admin Login
         </h1>

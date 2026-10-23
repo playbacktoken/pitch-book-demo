@@ -59,7 +59,7 @@ export default function BookingApp() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
           <div className="max-w-2xl animate-rise">
             <div className="inline-flex items-center gap-2 text-[11px] font-bold tracking-[0.25em] text-emerald-400 uppercase">
-              <Crest className="h-6 w-6" /> Walterstown GFC · Navan, Co. Meath
+              <Crest className="h-10 w-10" /> Walterstown GFC · Navan, Co. Meath
             </div>
             <h1 className="mt-4 font-display text-4xl sm:text-5xl lg:text-6xl font-black uppercase leading-[0.95]">
               Pitch &amp; Facility Bookings
@@ -141,7 +141,7 @@ export default function BookingApp() {
       <footer className="bg-[#111827] text-slate-400 border-t border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-sm flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <Crest className="h-7 w-7" />
+            <Crest className="h-10 w-10" />
             <span className="font-display font-bold text-white tracking-wide">WALTERSTOWN GFC</span>
           </div>
           <span>Navan, Co. Meath</span>
