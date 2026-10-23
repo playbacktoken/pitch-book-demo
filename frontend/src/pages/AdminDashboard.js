@@ -372,7 +372,7 @@ function FacilityEditor({ facility, onSave, onClose }) {
 function BlocksTab() {
   const [facs, setFacs] = useState([]);
   const [blocks, setBlocks] = useState([]);
-  const [form, setForm] = useState({ facility_id: "", part_id: "", date: todayISO(), start_time: "18:00", duration_minutes: 60, reason: "" });
+  const [form, setForm] = useState({ facility_id: "", part_id: "", date: todayISO(), end_date: todayISO(), all_day: true, start_time: "18:00", duration_minutes: 60, reason: "" });
 
   const load = async () => {
     const f = (await api.get("/facilities")).data;
@@ -386,8 +386,10 @@ function BlocksTab() {
 
   const create = async () => {
     try {
-      await api.post("/admin/blocks", form);
-      toast.success("Slot blocked");
+      const { data } = await api.post("/admin/blocks", form);
+      toast.success(`Blocked ${data.days} day(s)`);
+      if (data.clashing_bookings)
+        toast.warning(`${data.clashing_bookings} existing booking(s) fall inside this block. Decline them in Requests if needed.`);
       setBlocks((await api.get("/admin/blocks")).data);
     } catch (err) {
       toast.error(formatApiErrorDetail(err.response?.data?.detail) || err.message);
@@ -398,7 +400,8 @@ function BlocksTab() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <div className="rounded-xl border border-slate-200 bg-white p-5">
-        <h3 className="font-display text-xl font-bold uppercase flex items-center gap-2"><Ban className="h-5 w-5 text-slate-500" /> Block a slot</h3>
+        <h3 className="font-display text-xl font-bold uppercase flex items-center gap-2"><Ban className="h-5 w-5 text-slate-500" /> Block time</h3>
+        <p className="mt-1 text-sm text-slate-500">Close a pitch for a few hours or for weeks at a time, e.g. maintenance or county fixtures.</p>
         <div className="mt-4 space-y-3">
           <div>
             <Label>Facility</Label>
@@ -414,8 +417,17 @@ function BlocksTab() {
               {facility?.parts.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
             </select>
           </div>
-          <div className="grid grid-cols-3 gap-2">
-            <div><Label>Date</Label><Input type="date" min={todayISO()} value={form.date} data-testid="block-date" onChange={(e) => setForm({ ...form, date: e.target.value })} /></div>
+          <div className="grid grid-cols-2 gap-2">
+            <div><Label>From</Label><Input type="date" min={todayISO()} value={form.date} data-testid="block-date"
+              onChange={(e) => setForm({ ...form, date: e.target.value, end_date: form.end_date < e.target.value ? e.target.value : form.end_date })} /></div>
+            <div><Label>To</Label><Input type="date" min={form.date} value={form.end_date} data-testid="block-end-date" onChange={(e) => setForm({ ...form, end_date: e.target.value })} /></div>
+          </div>
+          <div className="flex items-center gap-2">
+            <Switch checked={form.all_day} onCheckedChange={(v) => setForm({ ...form, all_day: v })} data-testid="block-all-day" />
+            <Label>All day</Label>
+          </div>
+          {!form.all_day && (
+          <div className="grid grid-cols-2 gap-2">
             <div><Label>Start</Label>
               <select value={form.start_time} className="w-full h-10 rounded-lg border border-slate-200 px-2 bg-white" onChange={(e) => setForm({ ...form, start_time: e.target.value })}>
                 {START_TIMES.map((t) => <option key={t}>{t}</option>)}
@@ -427,19 +439,23 @@ function BlocksTab() {
               </select>
             </div>
           </div>
+          )}
           <div><Label>Reason</Label><Input value={form.reason} data-testid="block-reason" placeholder="Maintenance, county fixture…" onChange={(e) => setForm({ ...form, reason: e.target.value })} /></div>
-          <Button onClick={create} data-testid="create-block-btn" className="w-full bg-[#111827] text-white">Block slot</Button>
+          <Button onClick={create} data-testid="create-block-btn" className="w-full bg-[#111827] text-white">Block</Button>
         </div>
       </div>
 
       <div>
-        <h3 className="font-display text-xl font-bold uppercase mb-3">Blocked slots</h3>
+        <h3 className="font-display text-xl font-bold uppercase mb-3">Blocked times</h3>
         <div className="space-y-2" data-testid="blocks-list">
           {blocks.length === 0 ? <div className="text-slate-500 text-sm">None yet.</div> : blocks.map((b) => (
             <div key={b.id} className="rounded-lg border border-slate-200 bg-white p-3 flex items-center justify-between">
               <div>
                 <div className="font-bold text-sm">{b.facility_name} — {b.part_name}</div>
-                <div className="text-sm text-slate-500">{fmtDate(b.date)} · {b.start_time}–{b.end_time} {b.reason ? `· ${b.reason}` : ""}</div>
+                <div className="text-sm text-slate-500">
+                  {b.start_date === b.end_date ? fmtDate(b.start_date) : `${fmtDate(b.start_date)} – ${fmtDate(b.end_date)}`}
+                  {" · "}{b.all_day ? "All day" : `${b.start_time}–${b.end_time}`}{b.reason ? ` · ${b.reason}` : ""}
+                </div>
               </div>
               <Button size="sm" variant="ghost" className="text-red-600" onClick={() => remove(b.id)} data-testid={`delete-block-${b.id}`}><Trash2 className="h-4 w-4" /></Button>
             </div>

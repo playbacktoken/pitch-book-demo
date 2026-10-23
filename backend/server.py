@@ -365,31 +365,64 @@ class BlockBody(BaseModel):
     facility_id: str
     part_id: str
     date: str
-    start_time: str
-    duration_minutes: int = Field(ge=15, le=1440)
+    end_date: Optional[str] = None
+    all_day: bool = False
+    start_time: str = "00:00"
+    duration_minutes: int = Field(default=60, ge=15, le=1440)
     reason: str = ""
 
 
 @api.get("/admin/blocks")
 async def list_blocks(_=Depends(require_admin)):
-    blocks = await db.blocks.find({}).sort("date", 1).to_list(500)
-    return [_clean(b) for b in blocks]
+    blocks = await db.blocks.find({}).sort("date", 1).to_list(5000)
+    groups = {}
+    for b in blocks:
+        gid = b.get("group_id") or b["id"]
+        g = groups.get(gid)
+        if g is None:
+            groups[gid] = {"id": gid, "facility_name": b["facility_name"], "part_name": b["part_name"],
+                           "start_date": b["date"], "end_date": b["date"], "start_time": b["start_time"],
+                           "end_time": b["end_time"], "all_day": b.get("all_day", False),
+                           "reason": b.get("reason", ""), "days": 1}
+        else:
+            g["end_date"] = max(g["end_date"], b["date"])
+            g["days"] += 1
+    today = date.today().isoformat()
+    return sorted((g for g in groups.values() if g["end_date"] >= today), key=lambda g: g["start_date"])
 
 
 @api.post("/admin/blocks")
 async def create_block(body: BlockBody, _=Depends(require_admin)):
     fac, part = await _get_facility_part(body.facility_id, body.part_id)
-    doc = {"id": str(uuid.uuid4()), "facility_id": fac["id"], "facility_name": fac["name"],
-           "part_id": part["id"], "part_name": part["name"], "zones": part["zones"],
-           "date": body.date, "start_time": body.start_time, "duration_minutes": body.duration_minutes,
-           "end_time": _end_time(body.start_time, body.duration_minutes), "reason": body.reason}
-    await db.blocks.insert_one(dict(doc))
-    return _clean(doc)
+    first = date.fromisoformat(body.date)
+    last = date.fromisoformat(body.end_date) if body.end_date else first
+    if last < first:
+        raise HTTPException(status_code=400, detail="End date must be on or after the start date")
+    if (last - first).days > 366:
+        raise HTTPException(status_code=400, detail="Blocks can be at most one year long")
+    start, duration = ("00:00", 1440) if body.all_day else (body.start_time, body.duration_minutes)
+    end = _end_time(start, duration)
+    gid = str(uuid.uuid4())
+    docs, clashes = [], 0
+    d = first
+    while d <= last:
+        ds = d.isoformat()
+        docs.append({"id": str(uuid.uuid4()), "group_id": gid, "facility_id": fac["id"], "facility_name": fac["name"],
+                     "part_id": part["id"], "part_name": part["name"], "zones": part["zones"],
+                     "date": ds, "start_time": start, "duration_minutes": duration, "end_time": end,
+                     "all_day": body.all_day, "reason": body.reason})
+        for sl in await db.slots.find({"facility_id": fac["id"], "date": ds,
+                                       "status": {"$in": ["requested", "approved"]}}).to_list(1000):
+            if set(part["zones"]) & set(sl.get("zones", [])) and _overlap(start, end, sl["start_time"], sl["end_time"]):
+                clashes += 1
+        d += timedelta(days=1)
+    await db.blocks.insert_many([dict(x) for x in docs])
+    return {"id": gid, "days": len(docs), "clashing_bookings": clashes}
 
 
 @api.delete("/admin/blocks/{block_id}")
 async def delete_block(block_id: str, _=Depends(require_admin)):
-    await db.blocks.delete_one({"id": block_id})
+    await db.blocks.delete_many({"$or": [{"group_id": block_id}, {"id": block_id}]})
     return {"status": "ok"}
 
 
