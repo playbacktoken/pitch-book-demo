@@ -11,9 +11,9 @@ FACILITIES = [
         "is_paid": True, "hourly_rate": 160.0, "fixed_duration_minutes": 60, "active": True, "order": 1,
         "parts": [
             {"id": "astro_full", "name": "Full Astro", "rate_multiplier": 1.0, "zones": ["c1", "c2", "c3"]},
-            {"id": "astro_cage_1", "name": "Cage 1 (North End)", "rate_multiplier": 0.325, "zones": ["c1"]},
+            {"id": "astro_cage_1", "name": "Cage 1 (Nearest Clubhouse)", "rate_multiplier": 0.325, "zones": ["c1"]},
             {"id": "astro_cage_2", "name": "Cage 2 (Middle)", "rate_multiplier": 0.325, "zones": ["c2"]},
-            {"id": "astro_cage_3", "name": "Cage 3 (South End)", "rate_multiplier": 0.325, "zones": ["c3"]},
+            {"id": "astro_cage_3", "name": "Cage 3 (Furthest from Clubhouse)", "rate_multiplier": 0.325, "zones": ["c3"]},
         ],
     },
     {
