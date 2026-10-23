@@ -92,8 +92,6 @@ async def seed_facilities():
             "policy_note": "All bookings must be approved by the club.",
         })
 
-    if await db.requests.count_documents({}) == 0:
-        await _seed_sample_bookings()
 
 
 def _end_time(start: str, minutes: int) -> str:
