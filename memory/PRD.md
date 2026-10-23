@@ -62,3 +62,4 @@ everyone is kept informed by email.
 - 2026-06: alert_email set to niallreynolds7@gmail.com; that user promoted to admin.
 - 2026-06: Blocks support date ranges (From/To, max 1 year) + All day; stored per-day with group_id, listed/deleted as a group; API warns on clashing existing bookings.
 - 2026-06: All booking emails list each session's date and time (emailer._details_block reads slots).
+- 2026-06: Public availability timeline shows booker name + phone on requested/booked slots (user chose visible to everyone).

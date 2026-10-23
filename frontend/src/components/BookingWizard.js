@@ -405,6 +405,8 @@ function DayTimeline({ occupied, start, end, onPick, clash }) {
             {o.start_time}–{o.end_time} · {o.part_name}
             {" · "}
             {o.type === "block" ? `Unavailable${o.reason ? ` (${o.reason})` : ""}` : o.status === "approved" ? "Booked" : "Requested"}
+            {o.booker_name && ` by ${o.booker_name}`}
+            {o.phone && ` · ${o.phone}`}
           </div>
         ))}
         <div
@@ -412,7 +414,7 @@ function DayTimeline({ occupied, start, end, onPick, clash }) {
           style={{ top: top(start), height: top(end) - top(start) }}
           data-testid="timeline-selection"
         >
-          <span className={`absolute right-2 top-1 text-[11px] font-bold ${clash ? "text-red-600" : "text-[#15803d]"}`}>Your time {start}–{end}</span>
+          <span className={`absolute right-2 bottom-0.5 text-[11px] font-bold ${clash ? "text-red-600" : "text-[#15803d]"}`}>Your time {start}–{end}</span>
         </div>
       </div>
       {sorted.length === 0 && (

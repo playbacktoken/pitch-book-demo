@@ -99,11 +99,16 @@ async def availability(facility_id: str, date: str):
     slots = await db.slots.find({"facility_id": facility_id, "date": date,
                                  "status": {"$in": ["requested", "approved"]}}).to_list(1000)
     blocks = await db.blocks.find({"facility_id": facility_id, "date": date}).to_list(1000)
+    reqs = await db.requests.find({"id": {"$in": list({s["request_id"] for s in slots})}},
+                                  {"id": 1, "booker_name": 1, "phone": 1}).to_list(1000)
+    who = {r["id"]: r for r in reqs}
     occupied = []
     for s in slots:
+        r = who.get(s["request_id"], {})
         occupied.append({"zones": s.get("zones", []), "start_time": s["start_time"],
                          "end_time": s["end_time"], "part_id": s.get("part_id"), "part_name": s.get("part_name", ""),
-                         "status": s["status"], "type": "booking"})
+                         "status": s["status"], "type": "booking",
+                         "booker_name": r.get("booker_name", ""), "phone": r.get("phone", "")})
     for b in blocks:
         occupied.append({"zones": b.get("zones", []), "start_time": b["start_time"],
                          "end_time": b["end_time"], "part_id": b.get("part_id"), "part_name": b.get("part_name", ""),
