@@ -320,9 +320,16 @@ export default function BookingWizard({ facility, maxDuration, onBooked }) {
         </div>
 
         <div className="rounded-xl border border-slate-200 bg-white p-4">
-          <Tabs defaultValue="guest">
+          <Tabs key={user ? "member" : "guest"} defaultValue={user ? "member" : "guest"}>
             <TabsList className="grid grid-cols-2 w-full">
-              <TabsTrigger value="guest" data-testid="tab-guest">Book as Guest</TabsTrigger>
+              <TabsTrigger
+                value="guest"
+                disabled={!!user}
+                data-testid="tab-guest"
+                className="disabled:opacity-100 disabled:bg-slate-800 disabled:text-slate-500 disabled:cursor-not-allowed"
+              >
+                Book as Guest
+              </TabsTrigger>
               <TabsTrigger value="member" data-testid="tab-member">{user ? "Signed In" : "Member"}</TabsTrigger>
             </TabsList>
             <TabsContent value="guest" className="pt-2">
