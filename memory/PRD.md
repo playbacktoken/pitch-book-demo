@@ -56,3 +56,4 @@ everyone is kept informed by email.
 - 2026-06: Club crest (frontend/public/logo.jpg) used in header, hero, footer, admin, payment pages, favicon and email header.
 - 2026-06: Only Astro is paid. Main Pitch & Gym set free (seed + DB). Free/Paid badges and price text hidden for free facilities; 'Paid Slot' shown only on Astro.
 - 2026-06: Availability now a single-column day timeline showing existing bookings/blocks (time, area, status); click an hour to set start time. Availability API returns part_name.
+- 2026-06: Astro pricing: Full €160/hr, each cage €52/hr (rate_multiplier 0.325). Astro fixed to 1-hour slots (facility.fixed_duration_minutes=60, enforced in API; admin toggle '1-hour slots only').

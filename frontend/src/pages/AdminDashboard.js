@@ -330,6 +330,10 @@ function FacilityEditor({ facility, onSave, onClose }) {
               <Label>Paid facility</Label>
             </div>
             <div className="flex items-center gap-2">
+              <Switch checked={f.fixed_duration_minutes === 60} onCheckedChange={(v) => up("fixed_duration_minutes", v ? 60 : null)} data-testid="fac-one-hour-toggle" />
+              <Label>1-hour slots only</Label>
+            </div>
+            <div className="flex items-center gap-2">
               <Switch checked={f.active} onCheckedChange={(v) => up("active", v)} />
               <Label>Visible</Label>
             </div>

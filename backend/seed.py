@@ -8,12 +8,12 @@ FACILITIES = [
         "id": "astro", "name": "Astro", "tag": "Astro",
         "photo": "https://images.unsplash.com/photo-1600529533273-938db2591dc4?crop=entropy&cs=srgb&fm=jpg&q=85&w=1200",
         "note": "Book the full astro or a single cage.",
-        "is_paid": True, "hourly_rate": 60.0, "active": True, "order": 1,
+        "is_paid": True, "hourly_rate": 160.0, "fixed_duration_minutes": 60, "active": True, "order": 1,
         "parts": [
             {"id": "astro_full", "name": "Full Astro", "rate_multiplier": 1.0, "zones": ["c1", "c2", "c3"]},
-            {"id": "astro_cage_1", "name": "Cage 1 (North End)", "rate_multiplier": 0.35, "zones": ["c1"]},
-            {"id": "astro_cage_2", "name": "Cage 2 (Middle)", "rate_multiplier": 0.35, "zones": ["c2"]},
-            {"id": "astro_cage_3", "name": "Cage 3 (South End)", "rate_multiplier": 0.35, "zones": ["c3"]},
+            {"id": "astro_cage_1", "name": "Cage 1 (North End)", "rate_multiplier": 0.325, "zones": ["c1"]},
+            {"id": "astro_cage_2", "name": "Cage 2 (Middle)", "rate_multiplier": 0.325, "zones": ["c2"]},
+            {"id": "astro_cage_3", "name": "Cage 3 (South End)", "rate_multiplier": 0.325, "zones": ["c3"]},
         ],
     },
     {

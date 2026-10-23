@@ -39,7 +39,7 @@ export default function BookingWizard({ facility, maxDuration, onBooked }) {
   const [partId, setPartId] = useState(facility.parts[0].id);
   const [date, setDate] = useState(todayISO());
   const [start, setStart] = useState("18:00");
-  const [duration, setDuration] = useState(60);
+  const [duration, setDuration] = useState(facility.fixed_duration_minutes || 60);
   const [repeatOn, setRepeatOn] = useState(false);
   const [weekdays, setWeekdays] = useState([]);
   const [weeks, setWeeks] = useState(4);
@@ -222,7 +222,7 @@ export default function BookingWizard({ facility, maxDuration, onBooked }) {
               onChange={(e) => setDuration(Number(e.target.value))}
               className="w-full h-10 rounded-lg border border-slate-200 px-3 text-sm font-bold bg-white"
             >
-              {durationOptions(maxDuration).map((m) => (
+              {(facility.fixed_duration_minutes ? [facility.fixed_duration_minutes] : durationOptions(maxDuration)).map((m) => (
                 <option key={m} value={m}>{fmtDuration(m)}</option>
               ))}
             </select>

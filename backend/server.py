@@ -157,6 +157,9 @@ async def create_booking(body: BookingCreate, user=Depends(get_current_user_opti
     max_dur = settings.get("max_duration_minutes", 270)
     if body.duration_minutes > max_dur:
         raise HTTPException(status_code=400, detail=f"Maximum duration is {max_dur} minutes")
+    fixed = fac.get("fixed_duration_minutes")
+    if fixed and body.duration_minutes != fixed:
+        raise HTTPException(status_code=400, detail=f"{fac['name']} can only be booked in {fixed}-minute slots")
 
     all_dates = _session_dates(body.first_date, body.repeat)
     booked, skipped = [], []
@@ -341,6 +344,7 @@ class FacilityBody(BaseModel):
     note: str = ""
     is_paid: bool = False
     hourly_rate: float = 0.0
+    fixed_duration_minutes: Optional[int] = None
     active: bool = True
     order: int = 99
     parts: List[dict] = []
