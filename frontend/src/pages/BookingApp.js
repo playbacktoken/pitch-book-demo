@@ -178,7 +178,6 @@ function FacilityCard({ f, active, onSelect }) {
           <PriceBadge isPaid={f.is_paid} />
         </div>
         <div className="absolute bottom-3 left-4 right-4">
-          <div className="text-[10px] font-bold tracking-[0.18em] uppercase text-emerald-300">{f.tag}</div>
           <div className="font-display text-xl font-extrabold text-white leading-tight">{f.name}</div>
         </div>
       </div>
