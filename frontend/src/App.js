@@ -5,6 +5,7 @@ import { AuthProvider } from "@/context/AuthContext";
 import BookingApp from "@/pages/BookingApp";
 import AdminDashboard from "@/pages/AdminDashboard";
 import { PaymentSuccess, PaymentCancel } from "@/pages/PaymentResult";
+import PayPage from "@/pages/PayPage";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/payment/success" element={<PaymentSuccess />} />
           <Route path="/payment/cancel" element={<PaymentCancel />} />
+          <Route path="/pay/:id" element={<PayPage />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

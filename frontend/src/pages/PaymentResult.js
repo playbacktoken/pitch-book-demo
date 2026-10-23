@@ -69,8 +69,7 @@ export function PaymentSuccess() {
             Payment Received
           </h1>
           <p className="mt-2 text-slate-300 text-sm">
-            Booking request <strong className="font-mono-nums">{reference}</strong> has been paid and is waiting
-            for club approval. A confirmation has been sent to your email.
+            Thank you. Your payment for booking <strong className="font-mono-nums">{reference}</strong> has been received.
           </p>
           <Link to="/">
             <Button className="mt-6 bg-[#15803d] hover:bg-[#166534] text-white" data-testid="back-home-btn">
@@ -104,7 +103,7 @@ export function PaymentCancel() {
       <XCircle className="h-14 w-14 mx-auto text-slate-400" />
       <h1 className="mt-4 font-display text-2xl font-extrabold uppercase">Payment Cancelled</h1>
       <p className="mt-2 text-slate-300 text-sm">
-        You have not been charged and the booking was not made. You can book again at any time.
+        You have not been charged. You can use the payment link in your email to pay before the deadline.
       </p>
       <Link to="/">
         <Button className="mt-6 bg-[#15803d] hover:bg-[#166534] text-white">

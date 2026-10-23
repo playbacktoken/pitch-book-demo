@@ -6,6 +6,7 @@ const MAP = {
   approved: { bg: "#ECFDF5", text: "#065F46", border: "#6EE7B7", label: "Approved", Icon: CheckCircle2 },
   declined: { bg: "#FEF2F2", text: "#B91C1C", border: "#FECACA", label: "Declined", Icon: XCircle },
   blocked: { bg: "#F3F4F6", text: "#4B5563", border: "#E5E7EB", label: "Blocked", Icon: Ban },
+  cancelled: { bg: "#F3F4F6", text: "#4B5563", border: "#E5E7EB", label: "Removed", Icon: Ban },
 };
 
 export function StatusBadge({ status, className = "" }) {
@@ -37,7 +38,13 @@ export function PriceBadge({ isPaid, className = "" }) {
 export function PayBadge({ status }) {
   if (status === "paid")
     return <span className="text-xs font-bold text-[#047857]">● Paid</span>;
-  if (status === "pending")
-    return <span className="text-xs font-bold text-[#B45309]">● Awaiting payment</span>;
+  const other = {
+    due: ["Awaiting payment", "#B45309"],
+    partial: ["Part paid", "#B45309"],
+    not_due: ["Pay after approval", "#64748B"],
+    expired: ["Not paid", "#B91C1C"],
+  }[status];
+  if (other)
+    return <span className="text-xs font-bold" style={{ color: other[1] }} data-testid={`pay-badge-${status}`}>● {other[0]}</span>;
   return null;
 }

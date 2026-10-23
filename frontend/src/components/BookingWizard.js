@@ -25,7 +25,6 @@ import {
   Calendar,
   Clock,
   Repeat,
-  CreditCard,
   CheckCircle2,
   AlertTriangle,
   Loader2,
@@ -120,11 +119,6 @@ export default function BookingWizard({ facility, maxDuration, onBooked }) {
         notes: booker.notes,
         origin_url: window.location.origin,
       });
-      if (data.checkout_url) {
-        toast.info("Going to payment…");
-        window.location.href = data.checkout_url;
-        return;
-      }
       const skipped = data.skipped_dates?.length;
       toast.success(
         `Request ${data.request.reference} sent. ${data.booked_dates.length} session(s) waiting for approval.` +
@@ -313,7 +307,7 @@ export default function BookingWizard({ facility, maxDuration, onBooked }) {
           </div>
           {isPaid && (
             <div className="mt-3 border-t border-white/10 pt-3 flex items-center justify-between">
-              <span className="text-sm text-slate-300">Total (payable now)</span>
+              <span className="text-sm text-slate-300">Total</span>
               <span className="font-mono-nums text-2xl font-bold" data-testid="booking-total">{fmtMoney(estTotal)}</span>
             </div>
           )}
@@ -350,15 +344,13 @@ export default function BookingWizard({ facility, maxDuration, onBooked }) {
             data-testid="submit-booking-button"
             className="w-full mt-4 h-11 text-base bg-[#15803d] hover:bg-[#166534] text-white font-bold"
           >
-            {submitting ? (
-              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-            ) : isPaid ? (
-              <CreditCard className="h-4 w-4 mr-2" />
-            ) : null}
-            {isPaid ? `Pay ${fmtMoney(estTotal)} & Request` : "Send Request"}
+            {submitting && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+            Send Request
           </Button>
           <p className="mt-2 text-[11px] text-slate-400 text-center">
-            Your booking is confirmed once the club approves it.
+            {isPaid
+              ? "Nothing is charged now. Once the club approves your request, you will get an email with a payment link. It must be paid within 6 hours."
+              : "Your booking is confirmed once the club approves it."}
           </p>
         </div>
       </div>

@@ -141,7 +141,18 @@ async def send_booking_confirmation(req: dict):
     return await send_email(to=req["email"], subject=f'Booking request received — {req.get("reference","")}', html=_wrap(inner))
 
 
-async def send_status_update(req: dict):
+def _pay_block(pay: dict) -> str:
+    options = f"this week (€{pay['next_amount']:.2f})"
+    if pay["count"] > 1:
+        options += f" or all {pay['count']} remaining weeks at once (€{pay['all_amount']:.2f})"
+    return (f'<p style="color:#475569;font-size:14px">Please pay by <strong>{escape(pay["due"])}</strong>. '
+            f'If it is not paid by then, the booking for that date will be removed.</p>'
+            f'<p style="color:#475569;font-size:14px">You can pay for {escape(options)}.</p>'
+            f'<p style="margin:20px 0"><a href="{escape(pay["url"])}" style="background:#15803D;color:#FFFFFF;'
+            f'padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:700;font-size:14px">Pay now</a></p>')
+
+
+async def send_status_update(req: dict, pay: dict | None = None):
     approved = req.get("status") == "approved"
     heading = "Booking approved" if approved else "Booking declined"
     color = "#15803D" if approved else "#B91C1C"
@@ -152,8 +163,24 @@ async def send_status_update(req: dict):
                  f'<strong>Note from the club:</strong> {escape(str(note))}</p>') if note else ""
     inner = (f'<h2 style="color:{color};font-size:20px;margin:0 0 8px">{heading}</h2>'
              f'<p style="color:#475569;font-size:14px">Hi {escape(req.get("booker_name",""))}, {msg}</p>'
-             f'{note_html}{_details_block(req)}')
+             f'{note_html}{_pay_block(pay) if pay else ""}{_details_block(req)}')
     return await send_email(to=req["email"], subject=f'{heading} — {req.get("reference","")}', html=_wrap(inner))
+
+
+async def send_payment_due(req: dict, dates: list, pay: dict):
+    inner = (f'<h2 style="color:#0F172A;font-size:20px;margin:0 0 8px">Payment due</h2>'
+             f'<p style="color:#475569;font-size:14px">Hi {escape(req.get("booker_name","")) }, your booking on '
+             f'{escape(", ".join(dates))} at {escape(req.get("start_time",""))} needs to be paid.</p>'
+             f'{_pay_block(pay)}{_details_block(req)}')
+    return await send_email(to=req["email"], subject=f'Payment due — {req.get("reference","")}', html=_wrap(inner))
+
+
+async def send_payment_expired(req: dict, dates: list):
+    inner = (f'<h2 style="color:#B91C1C;font-size:20px;margin:0 0 8px">Booking removed</h2>'
+             f'<p style="color:#475569;font-size:14px">Hi {escape(req.get("booker_name",""))}, payment was not '
+             f'received in time, so your booking on {escape(", ".join(dates))} has been removed. '
+             f'You can make a new booking on the club website.</p>{_details_block(req)}')
+    return await send_email(to=req["email"], subject=f'Booking removed — {req.get("reference","")}', html=_wrap(inner))
 
 
 async def send_admin_alert(req: dict, admin_email: str):

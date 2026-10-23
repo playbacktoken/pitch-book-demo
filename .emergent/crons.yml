@@ -1,0 +1,8 @@
+crons:
+  - name: astro-payments
+    description: "Sends Astro payment links the day before each week and removes bookings unpaid after 6 hours"
+    cron: "*/15 * * * *"
+    endpoint: "{{BASE_URL}}/api/cron/payments"
+    method: POST
+    # Cron endpoints must ack 2xx immediately; enqueue/background the actual work.
+    enabled: true

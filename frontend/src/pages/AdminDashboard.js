@@ -19,7 +19,7 @@ import {
   Home, LogOut, Loader2, Check, X, Plus, Trash2, Pencil, Ban, Settings as SettingsIcon, Shield,
 } from "lucide-react";
 
-const FILTERS = ["all", "requested", "approved", "declined"];
+const FILTERS = ["all", "requested", "approved", "declined", "cancelled"];
 
 export default function AdminDashboard() {
   const { user, ready, login, logout } = useAuth();
@@ -150,7 +150,7 @@ function RequestsTab() {
     const { req, action } = decision;
     try {
       await api.post(`/admin/requests/${req.id}/${action}`, { note });
-      toast.success(`${req.reference} ${action === "approve" ? "approved" : "declined"}. The booker has been emailed.`);
+      toast.success(`${req.reference} ${action === "approve" ? "approved" : "declined"}. The booker has been emailed${action === "approve" && req.is_paid ? " a payment link" : ""}.`);
       setDecision(null); setNote("");
       load();
     } catch (err) {
@@ -190,7 +190,7 @@ function RequestsTab() {
                   </div>
                   <div className="mt-1 font-display text-lg font-bold">{r.facility_name} — {r.part_name}</div>
                   <div className="text-sm text-slate-500">
-                    {r.slots.map((s) => `${fmtDate(s.date)} ${s.start_time}–${s.end_time}`).join("  •  ")}
+                    {r.slots.map((s) => `${fmtDate(s.date)} ${s.start_time}–${s.end_time}${s.status === "cancelled" ? " (removed)" : s.pay_status === "paid" ? " (paid)" : ""}`).join("  •  ")}
                   </div>
                   <div className="text-sm text-slate-600 mt-1">
                     <strong>{r.booker_name}</strong> · {r.email} · {r.phone || "no phone"}

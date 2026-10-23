@@ -19,6 +19,7 @@ from db import db, client
 from auth import auth_router, seed_admin, get_current_user, get_current_user_optional, require_admin
 from seed import seed_facilities
 import emailer
+import payflow
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
@@ -65,6 +66,7 @@ async def _has_conflict(facility_id: str, zones: list, date_str: str, start: str
 
 def _clean(doc: dict) -> dict:
     doc.pop("_id", None)
+    doc.pop("pay_token", None)
     return doc
 
 
@@ -188,7 +190,7 @@ async def create_booking(body: BookingCreate, user=Depends(get_current_user_opti
         "facility_id": fac["id"], "facility_name": fac["name"],
         "part_id": part["id"], "part_name": part["name"],
         "status": "requested", "is_paid": is_paid, "amount": total, "currency": "eur",
-        "payment_status": ("pending" if is_paid else "none"), "session_id": None,
+        "payment_status": ("not_due" if is_paid else "none"), "origin_url": body.origin_url,
         "session_count": len(booked), "per_session_amount": per_session, "admin_note": "",
         "created_at": now, "first_date": booked[0], "start_time": body.start_time,
         "duration_minutes": body.duration_minutes, "skipped_dates": skipped,
@@ -202,29 +204,10 @@ async def create_booking(body: BookingCreate, user=Depends(get_current_user_opti
             "facility_id": fac["id"], "part_id": part["id"], "zones": part["zones"],
             "date": d, "start_time": body.start_time, "duration_minutes": body.duration_minutes,
             "end_time": end, "status": "requested",
+            **({"pay_status": "unpaid", "pay_due_at": None} if is_paid else {}),
         })
 
     checkout_url = None
-    if is_paid:
-        session = stripe.checkout.Session.create(
-            line_items=[{"price_data": {"currency": "eur",
-                                        "unit_amount": int(round(total * 100)),
-                                        "product_data": {"name": f'{fac["name"]} — {part["name"]}',
-                                                         "description": f'{len(booked)} session(s) · {reference}'}},
-                         "quantity": 1}],
-            mode="payment",
-            success_url=f"{body.origin_url}/payment/success?session_id={{CHECKOUT_SESSION_ID}}",
-            cancel_url=f"{body.origin_url}/payment/cancel?ref={reference}",
-            metadata={"request_id": rid, "reference": reference},
-        )
-        await db.requests.update_one({"id": rid}, {"$set": {"session_id": session.id}})
-        await db.payment_transactions.insert_one({
-            "session_id": session.id, "request_id": rid, "reference": reference,
-            "amount": total, "currency": "eur", "status": "initiated", "payment_status": "pending",
-            "created_at": now, "updated_at": now,
-        })
-        checkout_url = session.url
-
     await emailer.send_booking_confirmation(req_doc)
     admin_email = settings.get("alert_email") or os.environ.get("ADMIN_EMAIL")
     if admin_email:
@@ -263,21 +246,12 @@ async def payment_status(session_id: str):
         try:
             s = stripe.checkout.Session.retrieve(session_id)
             if s.payment_status == "paid" or s.status == "complete":
-                await _mark_paid(session_id)
+                await payflow.mark_paid(session_id)
                 record = await db.payment_transactions.find_one({"session_id": session_id})
         except stripe.error.StripeError:
             pass
     return {"session_id": record["session_id"], "status": record["status"],
             "payment_status": record["payment_status"], "reference": record.get("reference")}
-
-
-async def _mark_paid(session_id: str):
-    now = datetime.now(timezone.utc).isoformat()
-    res = await db.payment_transactions.update_one(
-        {"session_id": session_id, "payment_status": {"$ne": "paid"}},
-        {"$set": {"status": "completed", "payment_status": "paid", "updated_at": now}})
-    if res.modified_count:
-        await db.requests.update_one({"session_id": session_id}, {"$set": {"payment_status": "paid"}})
 
 
 @api.post("/stripe/webhook")
@@ -290,7 +264,7 @@ async def stripe_webhook(request: Request):
         raise HTTPException(status_code=400, detail="Invalid signature")
     obj, t = event["data"]["object"], event["type"]
     if t == "checkout.session.completed":
-        await _mark_paid(obj["id"])
+        await payflow.mark_paid(obj["id"])
     elif t == "checkout.session.expired":
         await db.payment_transactions.update_one({"session_id": obj["id"]},
             {"$set": {"status": "expired", "payment_status": "expired"}})
@@ -307,9 +281,10 @@ async def _set_request_status(request_id: str, status: str, note: str):
     if not req:
         raise HTTPException(status_code=404, detail="Request not found")
     await db.requests.update_one({"id": request_id}, {"$set": {"status": status, "admin_note": note}})
-    await db.slots.update_many({"request_id": request_id}, {"$set": {"status": status}})
+    await db.slots.update_many({"request_id": request_id, "status": "requested"}, {"$set": {"status": status}})
     req["status"], req["admin_note"] = status, note
-    await emailer.send_status_update(req)
+    pay = await payflow.on_approved(req) if status == "approved" and req.get("is_paid") else None
+    await emailer.send_status_update(req, pay)
     return _clean(req)
 
 
@@ -441,6 +416,7 @@ async def update_settings(body: SettingsBody, _=Depends(require_admin)):
 
 app.include_router(auth_router)
 app.include_router(api)
+app.include_router(payflow.router)
 
 app.add_middleware(
     CORSMiddleware,
