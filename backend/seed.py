@@ -60,11 +60,10 @@ FACILITIES = [
     {
         "id": "gym", "name": "Gym", "tag": "Indoor",
         "photo": "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?crop=entropy&cs=srgb&fm=jpg&q=85&w=1200",
-        "note": "Book the whole gym for a team, or an individual slot.",
+        "note": "Book the whole gym for your team.",
         "is_paid": False, "hourly_rate": 0.0, "active": True, "order": 6,
         "parts": [
             {"id": "gym_full", "name": "Full Gym", "rate_multiplier": 1.0, "zones": ["gym"]},
-            {"id": "gym_slot", "name": "Individual Slot", "rate_multiplier": 0.25, "zones": ["gym"]},
         ],
     },
 ]
