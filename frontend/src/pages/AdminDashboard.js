@@ -198,7 +198,7 @@ function RequestsTab() {
                   </div>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
-                  <div className="font-mono-nums font-bold text-lg mr-2">{r.is_paid ? fmtMoney(r.amount) : "Free"}</div>
+                  <div className="font-mono-nums font-bold text-lg mr-2">{r.is_paid ? fmtMoney(r.amount) : ""}</div>
                   {r.status === "requested" && (
                     <>
                       <Button size="sm" onClick={() => { setDecision({ req: r, action: "approve" }); setNote(""); }}
@@ -286,7 +286,7 @@ function FacilitiesTab() {
                 <div className="font-display text-lg font-bold truncate">{f.name}</div>
                 {!f.active && <span className="text-xs text-slate-400">(hidden)</span>}
               </div>
-              <div className="text-sm text-slate-500">{f.is_paid ? `${fmtMoney(f.hourly_rate)}/hr` : "Free"} · {f.parts.length} area(s)</div>
+              <div className="text-sm text-slate-500">{f.is_paid ? `${fmtMoney(f.hourly_rate)}/hr · ` : ""}{f.parts.length} area(s)</div>
               <p className="text-xs text-slate-500 line-clamp-2 mt-1">{f.note}</p>
               <div className="mt-2 flex gap-2">
                 <Button size="sm" variant="outline" onClick={() => setEditing({ ...f })} data-testid={`edit-facility-${f.id}`}>

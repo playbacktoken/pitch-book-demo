@@ -186,12 +186,10 @@ function FacilityCard({ f, active, onSelect }) {
         <p className="text-sm text-slate-600 leading-relaxed line-clamp-3">{f.note}</p>
         <div className="mt-3 flex items-center justify-between">
           <div className="text-sm">
-            {f.is_paid ? (
+            {f.is_paid && (
               <span className="font-mono-nums font-bold text-slate-900">
                 {fmtMoney(f.hourly_rate)}<span className="text-xs font-semibold text-slate-400">/hr</span>
               </span>
-            ) : (
-              <span className="font-bold text-[#047857]">Free to book</span>
             )}
           </div>
           <span className="text-xs font-semibold text-slate-400">{f.parts.length} area(s)</span>
@@ -230,7 +228,7 @@ function BookingRow({ r }) {
         )}
       </div>
       <div className="text-right">
-        <div className="font-mono-nums font-bold text-lg">{r.is_paid ? fmtMoney(r.amount) : "Free"}</div>
+        <div className="font-mono-nums font-bold text-lg">{r.is_paid ? fmtMoney(r.amount) : ""}</div>
         <PayBadge status={r.payment_status} />
       </div>
     </div>

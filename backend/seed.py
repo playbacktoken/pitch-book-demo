@@ -20,7 +20,7 @@ FACILITIES = [
         "id": "main_pitch", "name": "Main Pitch", "tag": "Grass pitch",
         "photo": "https://images.unsplash.com/photo-1531410828623-a21e67dae762?crop=entropy&cs=srgb&fm=jpg&q=85",
         "note": "Book the full pitch or one half.",
-        "is_paid": True, "hourly_rate": 80.0, "active": True, "order": 2,
+        "is_paid": False, "hourly_rate": 0.0, "active": True, "order": 2,
         "parts": [
             {"id": "main_full", "name": "Full Pitch", "rate_multiplier": 1.0, "zones": ["top", "bottom"]},
             {"id": "main_top_half", "name": "Top Half (Clubhouse End)", "rate_multiplier": 0.55, "zones": ["top"]},
@@ -62,7 +62,7 @@ FACILITIES = [
         "id": "gym", "name": "Gym", "tag": "Indoor",
         "photo": "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?crop=entropy&cs=srgb&fm=jpg&q=85&w=1200",
         "note": "Book the whole gym for a team, or an individual slot.",
-        "is_paid": True, "hourly_rate": 35.0, "active": True, "order": 6,
+        "is_paid": False, "hourly_rate": 0.0, "active": True, "order": 6,
         "parts": [
             {"id": "gym_full", "name": "Full Gym", "rate_multiplier": 1.0, "zones": ["gym"]},
             {"id": "gym_slot", "name": "Individual Slot", "rate_multiplier": 0.25, "zones": ["gym"]},
@@ -113,7 +113,7 @@ async def _seed_sample_bookings():
          "facility_name": "Main Pitch", "zones": ["top", "bottom"], "date": d(2),
          "start_time": "19:00", "duration": 90, "booker_name": "Walterstown Senior Men",
          "email": "senior@walterstowngfc.ie", "phone": "0871234567", "status": "approved",
-         "is_paid": True, "amount": 120.0, "payment_status": "paid"},
+         "is_paid": False, "amount": 0.0, "payment_status": "none"},
         {"facility_id": "astro", "part_id": "astro_cage_2", "part_name": "Cage 2 (Middle)",
          "facility_name": "Astro", "zones": ["c2"], "date": d(1),
          "start_time": "18:00", "duration": 60, "booker_name": "Under-15 Camogie",

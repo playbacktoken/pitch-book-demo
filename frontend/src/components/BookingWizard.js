@@ -341,15 +341,15 @@ export default function BookingWizard({ facility, maxDuration, onBooked }) {
           <div className="mt-4 space-y-1.5 text-sm">
             <Row k="When" v={`${start}–${end}`} />
             <Row k="Duration" v={fmtDuration(duration)} />
-            <Row k="Per session" v={isPaid ? fmtMoney(perSession) : "Free"} />
+            {isPaid && <Row k="Per session" v={fmtMoney(perSession)} />}
             {repeatOn && <Row k="Sessions" v={`up to ${estSessions}`} />}
           </div>
-          <div className="mt-3 border-t border-white/10 pt-3 flex items-center justify-between">
-            <span className="text-sm text-slate-300">{isPaid ? "Total (payable now)" : "Total"}</span>
-            <span className="font-mono-nums text-2xl font-bold" data-testid="booking-total">
-              {isPaid ? fmtMoney(estTotal) : "€0.00"}
-            </span>
-          </div>
+          {isPaid && (
+            <div className="mt-3 border-t border-white/10 pt-3 flex items-center justify-between">
+              <span className="text-sm text-slate-300">Total (payable now)</span>
+              <span className="font-mono-nums text-2xl font-bold" data-testid="booking-total">{fmtMoney(estTotal)}</span>
+            </div>
+          )}
         </div>
 
         <div className="rounded-xl border border-slate-200 bg-white p-4">

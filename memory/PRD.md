@@ -54,3 +54,4 @@ everyone is kept informed by email.
 - Removed made-up details (Est. 1902, "The Blacks", Irish pitch names, equipment/floodlight claims) and the hero stats strip.
 - Facilities renamed: Astro, Main Pitch, Back Pitch, Training Pitch, Juvenile Pitch, Gym (DB synced).
 - 2026-06: Club crest (frontend/public/logo.jpg) used in header, hero, footer, admin, payment pages, favicon and email header.
+- 2026-06: Only Astro is paid. Main Pitch & Gym set free (seed + DB). Free/Paid badges and price text hidden for free facilities; 'Paid Slot' shown only on Astro.

@@ -23,19 +23,13 @@ export function StatusBadge({ status, className = "" }) {
 }
 
 export function PriceBadge({ isPaid, className = "" }) {
-  return isPaid ? (
+  if (!isPaid) return null;
+  return (
     <span
       className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-bold uppercase tracking-wide ${className}`}
       style={{ background: "#FEF3C7", color: "#B45309", border: "1px solid #FDE68A" }}
     >
       Paid Slot
-    </span>
-  ) : (
-    <span
-      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-bold uppercase tracking-wide ${className}`}
-      style={{ background: "#ECFDF5", color: "#047857", border: "1px solid #A7F3D0" }}
-    >
-      Free
     </span>
   );
 }
@@ -45,5 +39,5 @@ export function PayBadge({ status }) {
     return <span className="text-xs font-bold text-[#047857]">● Paid</span>;
   if (status === "pending")
     return <span className="text-xs font-bold text-[#B45309]">● Awaiting payment</span>;
-  return <span className="text-xs font-semibold text-slate-400">— No charge</span>;
+  return null;
 }
