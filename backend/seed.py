@@ -24,7 +24,7 @@ FACILITIES = [
         "parts": [
             {"id": "main_full", "name": "Full Pitch", "rate_multiplier": 1.0, "zones": ["top", "bottom"]},
             {"id": "main_top_half", "name": "Top Half (Clubhouse End)", "rate_multiplier": 0.55, "zones": ["top"]},
-            {"id": "main_second_half", "name": "Second Half (Road End)", "rate_multiplier": 0.55, "zones": ["bottom"]},
+            {"id": "main_second_half", "name": "Bottom Half (Far End)", "rate_multiplier": 0.55, "zones": ["bottom"]},
         ],
     },
     {
