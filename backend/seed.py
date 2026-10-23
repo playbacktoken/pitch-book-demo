@@ -42,12 +42,10 @@ FACILITIES = [
     {
         "id": "training_pitch", "name": "Training Pitch", "tag": "Training",
         "photo": "/sites/training_pitch.jpg",
-        "note": "Book the full training pitch or one area.",
+        "note": "Book the full training pitch.",
         "is_paid": False, "hourly_rate": 0.0, "active": True, "order": 4,
         "parts": [
             {"id": "train_full", "name": "Full Training Ground", "rate_multiplier": 1.0, "zones": ["a1", "a2"]},
-            {"id": "train_area_1", "name": "Area 1", "rate_multiplier": 0.5, "zones": ["a1"]},
-            {"id": "train_area_2", "name": "Area 2", "rate_multiplier": 0.5, "zones": ["a2"]},
         ],
     },
     {
