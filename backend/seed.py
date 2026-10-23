@@ -30,12 +30,12 @@ FACILITIES = [
     {
         "id": "back_pitch", "name": "Back Pitch", "tag": "Grass pitch",
         "photo": "https://images.unsplash.com/photo-1783787748654-eabdf2ebf80d?crop=entropy&cs=srgb&fm=jpg&q=85",
-        "note": "Book the full pitch, or the Stafford's or Boland's side half.",
+        "note": "Book the full pitch or one half. Left and right are as you look out at the pitch with the clubhouse behind you.",
         "is_paid": False, "hourly_rate": 0.0, "active": True, "order": 3,
         "parts": [
             {"id": "back_full", "name": "Full Pitch", "rate_multiplier": 1.0, "zones": ["staf", "bol"]},
-            {"id": "back_stafford", "name": "Half (Stafford's Side)", "rate_multiplier": 0.5, "zones": ["staf"]},
-            {"id": "back_boland", "name": "Half (Boland's Side)", "rate_multiplier": 0.5, "zones": ["bol"]},
+            {"id": "back_stafford", "name": "Left Half", "rate_multiplier": 0.5, "zones": ["staf"]},
+            {"id": "back_boland", "name": "Right Half", "rate_multiplier": 0.5, "zones": ["bol"]},
         ],
     },
     {
@@ -124,7 +124,7 @@ async def _seed_sample_bookings():
          "start_time": "10:00", "duration": 120, "booker_name": "Nursery Saturday Morning",
          "email": "nursery@walterstowngfc.ie", "phone": "0851112223", "status": "approved",
          "is_paid": False, "amount": 0.0, "payment_status": "none"},
-        {"facility_id": "back_pitch", "part_id": "back_stafford", "part_name": "Half (Stafford's Side)",
+        {"facility_id": "back_pitch", "part_id": "back_stafford", "part_name": "Left Half",
          "facility_name": "Back Pitch", "zones": ["staf"], "date": d(1),
          "start_time": "20:00", "duration": 75, "booker_name": "Local 5-a-side",
          "email": "fiveaside@example.com", "phone": "0834445556", "status": "requested",
