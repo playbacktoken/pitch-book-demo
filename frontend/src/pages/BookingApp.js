@@ -238,7 +238,7 @@ function BookingRow({ r }) {
         )}
       </div>
       <div className="text-right">
-        <div className="font-mono-nums font-bold text-lg">{r.is_paid ? fmtMoney(r.amount) : ""}</div>
+        <div className="font-mono-nums font-bold text-lg">{r.is_paid && r.payment_status !== "waived" ? fmtMoney(r.amount) : ""}</div>
         <PayBadge status={r.payment_status} />
       </div>
     </div>

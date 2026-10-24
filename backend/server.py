@@ -279,16 +279,24 @@ async def stripe_webhook(request: Request):
 # ---------- admin ----------
 class DecisionBody(BaseModel):
     note: str = ""
+    waive_payment: bool = False
 
 
-async def _set_request_status(request_id: str, status: str, note: str):
+async def _set_request_status(request_id: str, status: str, note: str, waive: bool = False):
     req = await db.requests.find_one({"id": request_id})
     if not req:
         raise HTTPException(status_code=404, detail="Request not found")
     await db.requests.update_one({"id": request_id}, {"$set": {"status": status, "admin_note": note}})
     await db.slots.update_many({"request_id": request_id, "status": "requested"}, {"$set": {"status": status}})
     req["status"], req["admin_note"] = status, note
-    pay = await payflow.on_approved(req) if status == "approved" and req.get("is_paid") else None
+    pay = None
+    if status == "approved" and req.get("is_paid"):
+        if waive:
+            await db.requests.update_one({"id": request_id}, {"$set": {"payment_status": "waived"}})
+            await db.slots.update_many({"request_id": request_id, "pay_status": "unpaid"}, {"$set": {"pay_status": "waived"}})
+            req["payment_status"] = "waived"
+        else:
+            pay = await payflow.on_approved(req)
     await emailer.send_status_update(req, pay)
     return _clean(req)
 
@@ -308,7 +316,7 @@ async def admin_requests(status: Optional[str] = None, _=Depends(require_admin))
 
 @api.post("/admin/requests/{request_id}/approve")
 async def approve_request(request_id: str, body: DecisionBody, _=Depends(require_admin)):
-    return await _set_request_status(request_id, "approved", body.note)
+    return await _set_request_status(request_id, "approved", body.note, body.waive_payment)
 
 
 @api.post("/admin/requests/{request_id}/decline")

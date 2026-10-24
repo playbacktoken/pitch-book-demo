@@ -43,6 +43,7 @@ export function PayBadge({ status }) {
     partial: ["Part paid", "#B45309"],
     not_due: ["Pay after approval", "#64748B"],
     expired: ["Not paid", "#B91C1C"],
+    waived: ["No payment (club)", "#047857"],
   }[status];
   if (other)
     return <span className="text-xs font-bold" style={{ color: other[1] }} data-testid={`pay-badge-${status}`}>● {other[0]}</span>;

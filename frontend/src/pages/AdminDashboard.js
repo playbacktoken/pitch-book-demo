@@ -146,11 +146,12 @@ function RequestsTab() {
   };
   useEffect(() => { load(); /* eslint-disable-next-line */ }, [filter]);
 
-  const decide = async () => {
+  const decide = async (waive = false) => {
     const { req, action } = decision;
     try {
-      await api.post(`/admin/requests/${req.id}/${action}`, { note });
-      toast.success(`${req.reference} ${action === "approve" ? "approved" : "declined"}. The booker has been emailed${action === "approve" && req.is_paid ? " a payment link" : ""}.`);
+      await api.post(`/admin/requests/${req.id}/${action}`, { note, waive_payment: waive });
+      const link = action === "approve" && req.is_paid && !waive ? " with a payment link" : "";
+      toast.success(`${req.reference} ${action === "approve" ? "approved" : "declined"}. The booker has been emailed${link}.`);
       setDecision(null); setNote("");
       load();
     } catch (err) {
@@ -198,7 +199,7 @@ function RequestsTab() {
                   </div>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
-                  <div className="font-mono-nums font-bold text-lg mr-2">{r.is_paid ? fmtMoney(r.amount) : ""}</div>
+                  <div className="font-mono-nums font-bold text-lg mr-2">{r.is_paid && r.payment_status !== "waived" ? fmtMoney(r.amount) : ""}</div>
                   {r.status === "requested" && (
                     <>
                       <Button size="sm" onClick={() => { setDecision({ req: r, action: "approve" }); setNote(""); }}
@@ -230,12 +231,29 @@ function RequestsTab() {
             <Textarea value={note} onChange={(e) => setNote(e.target.value)} rows={3} data-testid="decision-note"
               placeholder={decision?.action === "decline" ? "e.g. Pitch waterlogged / county fixture clash" : "e.g. Floodlights will be on"} />
           </div>
-          <DialogFooter>
+          {decision?.action === "approve" && decision.req.is_paid && (
+            <p className="text-sm text-slate-600">
+              This is a paid booking ({fmtMoney(decision.req.amount)}). Ask the booker to pay, or approve it free of charge for a club team.
+            </p>
+          )}
+          <DialogFooter className="gap-2">
             <Button variant="outline" onClick={() => setDecision(null)}>Cancel</Button>
-            <Button onClick={decide} data-testid="decision-confirm"
-              className={decision?.action === "approve" ? "bg-[#15803d] text-white" : "bg-red-600 text-white"}>
-              Confirm {decision?.action}
-            </Button>
+            {decision?.action === "approve" && decision.req.is_paid ? (
+              <>
+                <Button onClick={() => decide(true)} data-testid="decision-approve-no-payment" variant="outline"
+                  className="border-[#15803d] text-[#15803d]">
+                  Approve, no payment
+                </Button>
+                <Button onClick={() => decide(false)} data-testid="decision-confirm" className="bg-[#15803d] text-white">
+                  Approve &amp; ask for payment
+                </Button>
+              </>
+            ) : (
+              <Button onClick={() => decide(false)} data-testid="decision-confirm"
+                className={decision?.action === "approve" ? "bg-[#15803d] text-white" : "bg-red-600 text-white"}>
+                Confirm {decision?.action}
+              </Button>
+            )}
           </DialogFooter>
         </DialogContent>
       </Dialog>
